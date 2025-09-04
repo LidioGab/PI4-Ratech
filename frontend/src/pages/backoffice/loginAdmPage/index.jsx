@@ -1,10 +1,32 @@
 import './index.css';
-import Header from "../../components/header/index.jsx"
+import Header from "../../../components/header/index.jsx"
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from "axios"
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const navigate = useNavigate();
+
+  async function login(e) {
+    e.preventDefault();
+    try {
+      const login = {
+        dsEmail: email,
+        dsSenha: senha
+      };
+      const r = await axios.post("http://localhost:8080/login", login);
+      if (r.status === 200) {
+        navigate('/admdashboard');
+      } else {
+        alert('Login inválido!');
+      }
+    } catch (error) {
+      alert('Erro ao logar!');
+      console.log(error);
+    }
+  }
 
   return (
     <div className="login-page w-full">
@@ -14,7 +36,7 @@ export default function LoginPage() {
         <h1>Bem-vindo de volta!</h1>
         <p className="subtitle">Faça login para continuar</p>
         
-        <form onSubmit={handleSubmit}>
+  <form onSubmit={login}>
           <div className='form-inputs'>
             <label htmlFor="email">Email</label>
             <input 
@@ -39,7 +61,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <button type="submit" className="login-btn">
+          <button className="login-btn" type="submit">
             Entrar
           </button>
 

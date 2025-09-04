@@ -22,6 +22,9 @@ public class Usuario {
     @Column(name = "ds_telefone", nullable = false, length = 20)
     private String dsTelefone;
 
+    @Column (name = "ds_senha", nullable = false, length = 20 )
+    private String dsSenha;
+
     public Integer getIdUser() { return idUser; }
     public void setIdUser(Integer idUser) { this.idUser = idUser; }
     public String getNmUser() { return nmUser; }
@@ -32,4 +35,7 @@ public class Usuario {
     public void setDsCpf(String dsCpf) { this.dsCpf = dsCpf; }
     public String getDsTelefone() { return dsTelefone; }
     public void setDsTelefone(String dsTelefone) { this.dsTelefone = dsTelefone; }
+    public void setDsSenha(String dsSenha) {this.dsSenha = dsSenha;}
+    public String getDsSenha() {return dsSenha;}
+
 }

@@ -23,6 +23,7 @@ public class UserController {
     usuario.setDsEmail(usuarioDto.getDsEmail());
     usuario.setDsCpf(usuarioDto.getDsCpf());
     usuario.setDsTelefone(usuarioDto.getDsTelefone());
+    usuario.setDsSenha(usuarioDto.getDsSenha());
     userRepository.save(usuario);
     return "Usuário criado: " + usuario.getNmUser();
   }
@@ -42,6 +43,7 @@ public class UserController {
     private String dsEmail;
     private String dsCpf;
     private String dsTelefone;
+    private String dsSenha;
 
     public String getNmUser() { return nmUser; }
     public void setNmUser(String nmUser) { this.nmUser = nmUser; }
@@ -51,5 +53,8 @@ public class UserController {
     public void setDsCpf(String dsCpf) { this.dsCpf = dsCpf; }
     public String getDsTelefone() { return dsTelefone; }
     public void setDsTelefone(String dsTelefone) { this.dsTelefone = dsTelefone; }
+    public String getDsSenha() {return dsSenha;}
+    public void setDsSenha(String dsSenha) {this.dsSenha = dsSenha;}
+
   }
 }

@@ -6,5 +6,5 @@ import com.pi4.backend.api.entities.Usuario;
 
 @Repository
 public interface UserRepository extends JpaRepository<Usuario, Integer> {
-  
+	Usuario findByDsEmail(String dsEmail);
 }
