@@ -1,0 +1,44 @@
+.menuLateralPage{
+  width: 250px;
+  height: calc(100vh - 80px);
+  background-color: #333131;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 80px;
+  padding: 20px 0px;
+
+  img{
+    width: 200px;
+    margin-bottom: 30px;
+  }
+}
+
+.menu-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.menu-links li {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.menu-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 12px 20px;
+  display: block;
+  transition: background-color 0.3s ease;
+  text-align: left;
+}
+
+.menu-links a:hover {
+  background-color: #4a5568;
+}

@@ -1,7 +1,13 @@
+import MenuLateral from "../../../components/menuLateral";
+import Header from "../../../components/header";
+
 export default function admpage(){
-  return(
+return(
     <div className="admin-page">
-      <h1>admpge</h1>
+      <MenuLateral />      
+      <div>
+        <Header nome={"Bem vindo ao Dashboard"}/>
+      </div>
     </div>
   );
 }

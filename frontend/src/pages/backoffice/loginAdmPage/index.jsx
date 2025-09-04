@@ -24,13 +24,13 @@ export default function LoginPage() {
       }
     } catch (error) {
       alert('Erro ao logar!');
-      console.log(error);
+      console.err(error);
     }
   }
 
   return (
     <div className="login-page w-full">
-      <Header/>
+      <Header nome={"Faça seu login de adm"}/>
       
       <section className='form-section w-full'>
         <h1>Bem-vindo de volta!</h1>

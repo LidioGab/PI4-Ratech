@@ -3,9 +3,12 @@ package com.pi4.backend.api.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.pi4.backend.api.entities.Usuario;
@@ -28,14 +31,40 @@ public class UserController {
     return "Usuário criado: " + usuario.getNmUser();
   }
 
-  @GetMapping("/getUsers")
+  @GetMapping("/getusers")
   public List<Usuario> getUsers(){
     return userRepository.findAll();
   }
 
-  @GetMapping("/getUser/{id}")
+  @GetMapping("/getuser/{id}")
   public Object getUser(@PathVariable int id){
     return userRepository.findById(id).orElse(null);
+  }
+
+  @PutMapping("/updateuser/{id}")
+  public String updateUser(@PathVariable int id, @RequestBody UsuarioDto usuarioDto) {
+    Usuario usuario = userRepository.findById(id).orElse(null);
+    if (usuario != null) {
+      usuario.setNmUser(usuarioDto.getNmUser());
+      usuario.setDsEmail(usuarioDto.getDsEmail());
+      usuario.setDsCpf(usuarioDto.getDsCpf());
+      usuario.setDsTelefone(usuarioDto.getDsTelefone());
+      if (usuarioDto.getDsSenha() != null && !usuarioDto.getDsSenha().isEmpty()) {
+        usuario.setDsSenha(usuarioDto.getDsSenha());
+      }
+      userRepository.save(usuario);
+      return "Usuário atualizado: " + usuario.getNmUser();
+    }
+    return "Usuário não encontrado";
+  }
+
+  @DeleteMapping("/deleteuser/{id}")
+  public String deleteUser(@PathVariable int id) {
+    if (userRepository.existsById(id)) {
+      userRepository.deleteById(id);
+      return "Usuário deletado com sucesso";
+    }
+    return "Usuário não encontrado";
   }
 
   public static class UsuarioDto {
