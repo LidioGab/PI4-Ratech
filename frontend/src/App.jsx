@@ -4,6 +4,8 @@ import AdminDashboard from "./pages/backoffice/admDashboard/index.jsx";
 import ListarUsuarios from './pages/backoffice/listarUsuarios/index.jsx';
 import CriarUsuario from './pages/backoffice/criarUsuario/index.jsx';
 import EditarUsuario from './pages/backoffice/editarUsuario/index.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 function ListaProdutos() {
   return <h1>Lista de Produtos</h1>;
@@ -11,16 +13,18 @@ function ListaProdutos() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/admdashboard" element={<AdminDashboard />} />
-          <Route path="/usuarios" element={<ListarUsuarios />} />
-          <Route path="/criar-usuario" element={<CriarUsuario />} />
-          <Route path="/editar-usuario/:id" element={<EditarUsuario />} />
-          <Route path="/produtos" element={<ListaProdutos />} />
+          <Route path="/admdashboard" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/usuarios" element={<ProtectedRoute allowedGroups={["Administrador"]}><ListarUsuarios /></ProtectedRoute>} />
+          <Route path="/criar-usuario" element={<ProtectedRoute allowedGroups={["Administrador"]}><CriarUsuario /></ProtectedRoute>} />
+          <Route path="/editar-usuario/:id" element={<ProtectedRoute allowedGroups={["Administrador"]}><EditarUsuario /></ProtectedRoute>} />
+          <Route path="/produtos" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><ListaProdutos /></ProtectedRoute>} />
         </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

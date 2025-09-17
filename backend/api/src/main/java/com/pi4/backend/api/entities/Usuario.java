@@ -5,37 +5,44 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "tb_usuario")
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user")
-    private Integer idUser;
+    @Column(name = "id_usuario")
+    private Integer id;
 
-    @Column(name = "nm_user", nullable = false, length = 100)
-    private String nmUser;
+    @Column(name = "nome", nullable = false, length = 150)
+    private String nome;
 
-    @Column(name = "ds_email", nullable = false, length = 250)
-    private String dsEmail;
+    @Column(name = "cpf", nullable = false, length = 14, unique = true)
+    private String cpf;
 
-    @Column(name = "ds_cpf", nullable = false, length = 20)
-    private String dsCpf;
+    @Column(name = "email", nullable = false, length = 150, unique = true)
+    private String email;
 
-    @Column(name = "ds_telefone", nullable = false, length = 20)
-    private String dsTelefone;
+    @Column(name = "senha", nullable = false, length = 255)
+    private String senha; // senha criptografada
 
-    @Column (name = "ds_senha", nullable = false, length = 20 )
-    private String dsSenha;
+    @Column(name = "status", nullable = false)
+    private Boolean status = true;
 
-    public Integer getIdUser() { return idUser; }
-    public void setIdUser(Integer idUser) { this.idUser = idUser; }
-    public String getNmUser() { return nmUser; }
-    public void setNmUser(String nmUser) { this.nmUser = nmUser; }
-    public String getDsEmail() { return dsEmail; }
-    public void setDsEmail(String dsEmail) { this.dsEmail = dsEmail; }
-    public String getDsCpf() { return dsCpf; }
-    public void setDsCpf(String dsCpf) { this.dsCpf = dsCpf; }
-    public String getDsTelefone() { return dsTelefone; }
-    public void setDsTelefone(String dsTelefone) { this.dsTelefone = dsTelefone; }
-    public void setDsSenha(String dsSenha) {this.dsSenha = dsSenha;}
-    public String getDsSenha() {return dsSenha;}
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_grupo", nullable = false)
+    private Grupo grupo;
 
+    // Getters / Setters
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    public String getCpf() { return cpf; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
+    public Boolean getStatus() { return status; }
+    public void setStatus(Boolean status) { this.status = status; }
+    public Grupo getGrupo() { return grupo; }
+    public void setGrupo(Grupo grupo) { this.grupo = grupo; }
 }

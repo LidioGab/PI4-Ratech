@@ -1,7 +1,7 @@
 import './index.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';
 import Header from '../../../components/header';
 import MenuLateral from '../../../components/menuLateral';
 
@@ -11,15 +11,13 @@ export default function ListarUsuarios() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    buscarUsuarios();
-  }, []);
+  useEffect(() => { buscarUsuarios(); }, []);
 
   async function buscarUsuarios() {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:8080/getusers');
-      setUsuarios(response.data);
+  const response = await api.get('/usuarios');
+  setUsuarios(response.data || []);
       console.log(response.data)
       setError(null);
     } catch (error) {
@@ -30,21 +28,28 @@ export default function ListarUsuarios() {
     }
   }
 
-  async function deletarUsuario(idUser) {
-    if (window.confirm('Tem certeza que deseja excluir este usuário?')) {
-      try {
-        await axios.delete(`http://localhost:8080/deleteuser/${idUser}`);
-        alert('Usuário excluído com sucesso!');
-        buscarUsuarios(); 
-      } catch (error) {
-        console.error('Erro ao excluir usuário:', error);
-        alert('Erro ao excluir usuário');
-      }
+  async function toggleStatus(id) {
+    try {
+      await api.put(`/usuarios/${id}/status`);
+      buscarUsuarios();
+    } catch (e) {
+      alert('Falha ao alterar status');
     }
   }
 
-  function editarUsuario(idUser) {
-    navigate(`/editar-usuario/${idUser}`);
+  async function alterarSenha(id) {
+    const novaSenha = prompt('Nova senha:');
+    if (!novaSenha) return;
+    const confirmacao = prompt('Confirme a nova senha:');
+    if (novaSenha !== confirmacao) { alert('Senhas não conferem'); return; }
+    try {
+      await api.put(`/usuarios/${id}/senha`, { novaSenha, confirmacao });
+      alert('Senha alterada');
+    } catch (e) { alert('Erro ao alterar senha'); }
+  }
+
+  function editarUsuario(id) {
+    navigate(`/editar-usuario/${id}`);
   }
 
   function criarUsuario() {
@@ -97,7 +102,8 @@ export default function ListarUsuarios() {
               <th>Nome</th>
               <th>Email</th>
               <th>CPF</th>
-              <th>Telefone</th>
+              <th>Status</th>
+              <th>Grupo</th>
               <th>Ações</th>
             </tr>
           </thead>
@@ -109,27 +115,21 @@ export default function ListarUsuarios() {
                 </td>
               </tr>
             ) : (
-              usuarios.map((usuario) => (
-                <tr key={usuario.idUser}>
-                  <td>{usuario.idUser}</td>
-                  <td>{usuario.nmUser}</td>
-                  <td>{usuario.dsEmail}</td>
-                  <td>{usuario.dsCpf}</td>
-                  <td>{usuario.dsTelefone}</td>
+              usuarios.map((u) => (
+                <tr key={u.id}>
+                  <td>{u.id}</td>
+                  <td>{u.nome}</td>
+                  <td>{u.email}</td>
+                  <td>{u.cpf}</td>
+                  <td>{u.status ? 'Ativo' : 'Inativo'}</td>
+                  <td>{u.grupo?.nome}</td>
                   <td>
-                    <div className="action-buttons">
-                      <button 
-                        className="edit-btn" 
-                        onClick={() => editarUsuario(usuario.idUser)}
-                      >
-                        Editar
+                    <div className="action-buttons" style={{display:'flex', gap:'4px', flexWrap:'wrap'}}>
+                      <button className="edit-btn" onClick={() => editarUsuario(u.id)}>Editar</button>
+                      <button className="delete-btn" onClick={() => toggleStatus(u.id)}>
+                        {u.status ? 'Desativar' : 'Ativar'}
                       </button>
-                      <button 
-                        className="delete-btn" 
-                        onClick={() => deletarUsuario(usuario.idUser)}
-                      >
-                        Excluir
-                      </button>
+                      <button className="edit-btn" onClick={() => alterarSenha(u.id)}>Senha</button>
                     </div>
                   </td>
                 </tr>

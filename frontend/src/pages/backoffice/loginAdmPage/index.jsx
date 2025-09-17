@@ -2,29 +2,28 @@ import './index.css';
 import Header from "../../../components/header/index.jsx"
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from "axios"
+import { useAuth } from '../../../context/AuthContext.jsx';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  async function login(e) {
+  async function handleLogin(e) {
     e.preventDefault();
+    setError(null);
+    setLoading(true);
     try {
-      const login = {
-        dsEmail: email,
-        dsSenha: senha
-      };
-      const r = await axios.post("http://localhost:8080/login", login);
-      if (r.status === 200) {
-        navigate('/admdashboard');
-      } else {
-        alert('Login inválido!');
-      }
-    } catch (error) {
-      alert('Erro ao logar!');
-      console.err(error);
+      await login(email, senha);
+      navigate('/admdashboard');
+    } catch (err) {
+      const msg = err?.response?.data || 'Falha no login';
+      setError(msg);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -36,7 +35,7 @@ export default function LoginPage() {
         <h1>Bem-vindo de volta!</h1>
         <p className="subtitle">Faça login para continuar</p>
         
-  <form onSubmit={login}>
+  <form onSubmit={handleLogin}>
           <div className='form-inputs'>
             <label htmlFor="email">Email</label>
             <input 
@@ -61,8 +60,9 @@ export default function LoginPage() {
             />
           </div>
 
-          <button className="login-btn" type="submit">
-            Entrar
+          {error && <div style={{color:'red', marginBottom:'8px'}}>{error}</div>}
+          <button className="login-btn" type="submit" disabled={loading}>
+            {loading ? 'Entrando...' : 'Entrar'}
           </button>
 
           <div className="form-footer">

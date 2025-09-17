@@ -1,7 +1,8 @@
 import './index.css';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';
+import { validarCPF, formatarCPF } from '../../../utils/cpf';
 import Header from '../../../components/header';
 import MenuLateral from '../../../components/menuLateral';
 
@@ -9,12 +10,13 @@ export default function EditarUsuario() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({
-    nmUser: '',
-    dsEmail: '',
-    dsCpf: '',
-    dsTelefone: '',
-    dsSenha: ''
+    nome: '',
+    email: '',
+    cpf: '',
+    grupo: 'Administrador'
   });
+  const [senhaModal, setSenhaModal] = useState({ open: false, novaSenha: '', confirmacao: '' });
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [loadingUser, setLoadingUser] = useState(true);
 
@@ -25,14 +27,12 @@ export default function EditarUsuario() {
   async function buscarUsuario() {
     try {
       setLoadingUser(true);
-      const response = await axios.get(`http://localhost:8080/getuser/${id}`);
-      const usuario = response.data;
+      const { data } = await api.get(`/usuarios/${id}`);
       setFormData({
-        nmUser: usuario.nmUser || '',
-        dsEmail: usuario.dsEmail || '',
-        dsCpf: usuario.dsCpf || '',
-        dsTelefone: usuario.dsTelefone || '',
-        dsSenha: ''
+        nome: data.nome || '',
+        email: data.email || '',
+        cpf: data.cpf || '',
+        grupo: data.grupo?.nome || 'Administrador'
       });
     } catch (error) {
       console.error('Erro ao buscar usuário:', error);
@@ -45,10 +45,15 @@ export default function EditarUsuario() {
 
   function handleInputChange(e) {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(p => ({ ...p, [name]: value }));
+  }
+
+  function validate() {
+    const errs = {};
+  if (!validarCPF(formData.cpf)) errs.cpf = 'CPF inválido';
+    if (!['Administrador','Estoquista'].includes(formData.grupo)) errs.grupo = 'Grupo inválido';
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
   }
 
   async function handleSubmit(e) {
@@ -56,9 +61,11 @@ export default function EditarUsuario() {
     setLoading(true);
     
     try {
-      await axios.put(`http://localhost:8080/updateuser/${id}`, formData);
-      alert('Usuário atualizado com sucesso!');
-      navigate('/usuarios');
+  if (!validate()) return;
+  const payload = { nome: formData.nome, cpf: formData.cpf, grupo: formData.grupo };
+  await api.put(`/usuarios/${id}`, payload);
+  alert('Usuário atualizado');
+  navigate('/usuarios');
     } catch (error) {
       console.error('Erro ao atualizar usuário:', error);
       alert('Erro ao atualizar usuário');
@@ -98,67 +105,35 @@ export default function EditarUsuario() {
           <form onSubmit={handleSubmit} className="user-form">
             <div className="form-grid">
               <div className="form-group">
-                <label htmlFor="nmUser">Nome *</label>
-                <input
-                  type="text"
-                  id="nmUser"
-                  name="nmUser"
-                  value={formData.nmUser}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Digite o nome completo"
-                />
+                <label htmlFor="nome">Nome *</label>
+                <input type="text" id="nome" name="nome" value={formData.nome} onChange={handleInputChange} required placeholder="Digite o nome completo" />
               </div>
 
               <div className="form-group">
-                <label htmlFor="dsEmail">Email *</label>
-                <input
-                  type="email"
-                  id="dsEmail"
-                  name="dsEmail"
-                  value={formData.dsEmail}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="Digite o email"
-                />
+                <label>Email</label>
+                <input type="text" value={formData.email} disabled />
               </div>
 
               <div className="form-group">
-                <label htmlFor="dsCpf">CPF *</label>
-                <input
-                  type="text"
-                  id="dsCpf"
-                  name="dsCpf"
-                  value={formData.dsCpf}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="000.000.000-00"
-                />
+                <label htmlFor="cpf">CPF *</label>
+                <input type="text" id="cpf" name="cpf" value={formData.cpf} onChange={e=>{
+                  const { value } = e.target;
+                  setFormData(p=>({...p, cpf: formatarCPF(value)}));
+                }} required placeholder="000.000.000-00" />
+                {errors.cpf && <span style={{color:'red'}}>{errors.cpf}</span>}
               </div>
 
               <div className="form-group">
-                <label htmlFor="dsTelefone">Telefone *</label>
-                <input
-                  type="tel"
-                  id="dsTelefone"
-                  name="dsTelefone"
-                  value={formData.dsTelefone}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="(00) 00000-0000"
-                />
+                <label htmlFor="grupo">Grupo *</label>
+                <select id="grupo" name="grupo" value={formData.grupo} onChange={handleInputChange}>
+                  <option value="Administrador">Administrador</option>
+                  <option value="Estoquista">Estoquista</option>
+                </select>
+                {errors.grupo && <span style={{color:'red'}}>{errors.grupo}</span>}
               </div>
 
               <div className="form-group full-width">
-                <label htmlFor="dsSenha">Nova Senha (deixe vazio para manter a atual)</label>
-                <input
-                  type="password"
-                  id="dsSenha"
-                  name="dsSenha"
-                  value={formData.dsSenha}
-                  onChange={handleInputChange}
-                  placeholder="Digite a nova senha ou deixe vazio"
-                />
+                <button type="button" onClick={() => setSenhaModal({open:true, novaSenha:'', confirmacao:''})}>Alterar Senha</button>
               </div>
             </div>
 
@@ -180,6 +155,22 @@ export default function EditarUsuario() {
               </button>
             </div>
           </form>
+          {senhaModal.open && (
+            <div style={{position:'fixed', inset:0, background:'rgba(0,0,0,0.5)', display:'flex', alignItems:'center', justifyContent:'center'}}>
+              <div style={{background:'#fff', padding:20, borderRadius:8, minWidth:300}}>
+                <h3>Alterar Senha</h3>
+                <input type="password" placeholder="Nova senha" value={senhaModal.novaSenha} onChange={e=>setSenhaModal(s=>({...s,novaSenha:e.target.value}))} style={{display:'block', width:'100%', marginBottom:8}} />
+                <input type="password" placeholder="Confirmar senha" value={senhaModal.confirmacao} onChange={e=>setSenhaModal(s=>({...s,confirmacao:e.target.value}))} style={{display:'block', width:'100%', marginBottom:8}} />
+                <div style={{display:'flex', gap:8, justifyContent:'flex-end'}}>
+                  <button onClick={()=>setSenhaModal({open:false, novaSenha:'', confirmacao:''})}>Cancelar</button>
+                  <button onClick={async ()=>{
+                    if (!senhaModal.novaSenha || senhaModal.novaSenha !== senhaModal.confirmacao){alert('Senhas não conferem'); return;}
+                    try { await api.put(`/usuarios/${id}/senha`, { novaSenha: senhaModal.novaSenha, confirmacao: senhaModal.confirmacao }); alert('Senha alterada'); setSenhaModal({open:false,novaSenha:'',confirmacao:''}); } catch { alert('Erro ao alterar senha'); }
+                  }}>Salvar</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
