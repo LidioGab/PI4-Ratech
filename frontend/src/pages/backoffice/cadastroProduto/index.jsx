@@ -68,12 +68,27 @@ export default function CadastroProduto() {
         avaliacao: formData.avaliacao ? Number(formData.avaliacao) : null,
         descricao: formData.descricao,
         preco: Number(formData.preco),
-        quantidadeEstoque: qtd,
-        // Imagens ainda não são persistidas (backend não implementado). Placeholder:
-        imagens: []
+        quantidadeEstoque: qtd
       };
 
-      await api.post('/produtos', payload);
+      const produtoResp = await api.post('/produtos', payload);
+      const produtoId = produtoResp.data.id;
+
+      if (formData.imagens.length > 0) {
+        const form = new FormData();
+        formData.imagens.forEach(img => form.append('files', img.file));
+        if (imagemPrincipal != null) {
+          form.append('principalIndex', imagemPrincipal);
+        }
+        try {
+          console.log('Enviando imagens produto', produtoId, formData.imagens.length);
+          await api.post(`/produtos/${produtoId}/imagens`, form);
+        } catch (errUpload) {
+          console.error('Falha upload imagens', errUpload);
+          alert('Produto criado, mas houve erro ao enviar imagens. Você pode tentar editar e reenviar.');
+        }
+      }
+
       alert('Produto cadastrado com sucesso!');
       navigate('/produtos');
     } catch (error) {

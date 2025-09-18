@@ -21,7 +21,8 @@ function App() {
           <Route path="/criar-usuario" element={<ProtectedRoute allowedGroups={["Administrador"]}><CriarUsuario /></ProtectedRoute>} />
           <Route path="/editar-usuario/:id" element={<ProtectedRoute allowedGroups={["Administrador"]}><EditarUsuario /></ProtectedRoute>} />
           <Route path="/produtos" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><ListaProdutos /></ProtectedRoute>} />
-          <Route path="/cadastroproduto" element={<CadastroProduto/>} /></Routes>
+          <Route path="/criar-produto" element={<ProtectedRoute allowedGroups={["Administrador"]}><CadastroProduto/></ProtectedRoute>} />
+        </Routes>
       </BrowserRouter>
     </AuthProvider>
   );

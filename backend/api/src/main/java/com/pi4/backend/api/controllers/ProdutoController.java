@@ -63,28 +63,47 @@ public class ProdutoController {
         }
         if (produto.getQuantidadeEstoque() == null) produto.setQuantidadeEstoque(0);
         if (produto.getStatus() == null) produto.setStatus(true);
+        if (produto.getDescricao() == null || produto.getDescricao().length() == 0 || produto.getDescricao().length() > 2000) {
+            return ResponseEntity.badRequest().build();
+        }
         
         if (produto.getAvaliacao() != null) {
             BigDecimal av = produto.getAvaliacao();
-            if (av.compareTo(new BigDecimal("1.0")) < 0 || av.compareTo(new BigDecimal("5.0")) > 0) {
-                produto.setAvaliacao(null);
-            }
+            boolean range = av.compareTo(new BigDecimal("1.0")) >= 0 && av.compareTo(new BigDecimal("5.0")) <= 0;
+            boolean stepValido = av.multiply(new BigDecimal("10")).remainder(new BigDecimal("5")).intValue() == 0;
+            if (!(range && stepValido)) return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produtoAtualizado) {
-        return repository.findById(id).map(p -> {
-            if (produtoAtualizado.getNome() != null) p.setNome(produtoAtualizado.getNome());
-            if (produtoAtualizado.getPreco() != null) p.setPreco(produtoAtualizado.getPreco());
-            if (produtoAtualizado.getQuantidadeEstoque() != null) p.setQuantidadeEstoque(produtoAtualizado.getQuantidadeEstoque());
-            if (produtoAtualizado.getDescricao() != null) p.setDescricao(produtoAtualizado.getDescricao());
-            if (produtoAtualizado.getAvaliacao() != null) p.setAvaliacao(produtoAtualizado.getAvaliacao());
-            if (produtoAtualizado.getStatus() != null) p.setStatus(produtoAtualizado.getStatus());
-            Produto salvo = repository.save(p);
-            return ResponseEntity.ok(salvo);
-        }).orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        var opt = repository.findById(id);
+        if (opt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        Produto p = opt.get();
+        if (produtoAtualizado.getDescricao() != null) {
+            if (produtoAtualizado.getDescricao().length() == 0 || produtoAtualizado.getDescricao().length() > 2000) {
+                return ResponseEntity.badRequest().build();
+            }
+            p.setDescricao(produtoAtualizado.getDescricao());
+        }
+        if (produtoAtualizado.getAvaliacao() != null) {
+            BigDecimal av = produtoAtualizado.getAvaliacao();
+            boolean range = av.compareTo(new BigDecimal("1.0")) >= 0 && av.compareTo(new BigDecimal("5.0")) <= 0;
+            boolean stepValido = av.multiply(new BigDecimal("10")).remainder(new BigDecimal("5")).intValue() == 0;
+            if (!(range && stepValido)) {
+                return ResponseEntity.badRequest().build();
+            }
+            p.setAvaliacao(av);
+        }
+        if (produtoAtualizado.getNome() != null) p.setNome(produtoAtualizado.getNome());
+        if (produtoAtualizado.getPreco() != null) p.setPreco(produtoAtualizado.getPreco());
+        if (produtoAtualizado.getQuantidadeEstoque() != null) p.setQuantidadeEstoque(produtoAtualizado.getQuantidadeEstoque());
+        if (produtoAtualizado.getStatus() != null) p.setStatus(produtoAtualizado.getStatus());
+        Produto salvo = repository.save(p);
+        return ResponseEntity.ok(salvo);
     }
 
     @DeleteMapping("/{id}")
