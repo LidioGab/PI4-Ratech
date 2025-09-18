@@ -72,3 +72,21 @@ insert into tb_produto_imagem (id_produto, nome_arquivo, diretorio, imagem_princ
 (1, 'notebook2.jpg', '/imagens/1/', false),
 (2, 'mouse1.jpg', '/imagens/2/', true),
 (3, 'cadeira1.jpg', '/imagens/3/', true);
+
+-- Produtos gamer adicionais (15 itens) - periféricos de alta performance
+insert into tb_produto (nome, avaliacao, descricao, preco, qtd_estoque, status) values
+('Mouse Gamer Logitech G Pro X Superlight 2', 4.9, 'Mouse ultraleve 60g, sensor HERO 2 32K DPI, sem fio Lightspeed', 899.90, 25, true),
+('Mouse Gamer Razer DeathAdder V3 Pro', 4.8, 'Design ergonômico clássico, sensor Focus Pro 30K, wireless HyperSpeed', 849.90, 20, true),
+('Mousepad Gamer SteelSeries QcK Heavy XXL', 4.7, 'Superfície de tecido microtecido otimizada e base de borracha espessa', 299.90, 40, true),
+('Mousepad Gamer Razer Strider Chroma', 4.6, 'Mousepad híbrido com iluminação RGB Chroma addressable', 999.00, 12, true),
+('Teclado Mecânico HyperX Alloy Origins 60', 4.5, 'Formato 60%, switches HyperX Red, estrutura em alumínio', 599.90, 18, true),
+('Teclado Mecânico Logitech G915 TKL', 4.8, 'Low profile wireless LIGHTSPEED RGB, switches GL Tactile', 1299.90, 10, true),
+('Headset Gamer SteelSeries Arctis Nova Pro Wireless', 4.9, 'Hi-Res Audio, cancelamento ativo, base docking duplo sistema', 2999.00, 6, true),
+('Headset Gamer HyperX Cloud III Wireless', 4.7, 'Espuma memory foam, 120h bateria, áudio espacial DTS', 1099.90, 14, true),
+('Headset Gamer Razer BlackShark V2 Pro 2023', 4.8, 'Drivers TriForce Titanium 50mm, HyperClear Mic, HyperSpeed Wireless', 1399.90, 9, true),
+('Monitor Gamer ASUS ROG Swift 27" 240Hz OLED', 4.9, 'Display OLED 1440p 240Hz, HDR, G-SYNC compatível', 7999.00, 4, true),
+('Teclado Mecânico Wooting 60HE', 4.9, 'Switches Lekker Hall Effect analógicos, rapid trigger, fator 60%', 1599.00, 7, true),
+('Mouse Gamer Zowie EC2-CW Wireless', 4.6, 'Forma clássica para FPS competitivos, sensor 3370 wireless', 1099.90, 11, true),
+('Mousepad Gamer Artisan Ninja FX Zero XSoft XL', 4.8, 'Mousepad premium japonês equilíbrio controle x velocidade', 549.90, 15, true),
+('Controle Elite Xbox Series 2', 4.7, 'Paddles traseiros, ajustes de tensão de sticks, estojo carregador', 1299.00, 8, true),
+('Hub USB-C Thunderbolt 4 Gamer Base', 4.5, 'Expansão para setup multi-monitor e periféricos de baixa latência', 899.00, 5, true);

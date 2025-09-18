@@ -1,22 +1,23 @@
 import './index.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../services/api';
 import Header from '../../../components/header';
 import MenuLateral from '../../../components/menuLateral';
 
 export default function CadastroProduto() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    nomeProduto: '',
+    nome: '',
     avaliacao: '',
     descricao: '',
     preco: '',
-    qtdEstoque: '',
+    quantidadeEstoque: '',
     imagens: []
   });
   const [imagemPrincipal, setImagemPrincipal] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
 
   function handleInputChange(e) {
     const { name, value } = e.target;
@@ -51,21 +52,30 @@ export default function CadastroProduto() {
     setLoading(true);
 
     try {
-      const produtoPayload = {
-        nomeProduto: formData.nomeProduto,
-        avaliacao: formData.avaliacao,
+      const validation = {};
+      if (!formData.nome || formData.nome.length > 200) validation.nome = 'Nome obrigatório (<=200)';
+      const aval = parseFloat(formData.avaliacao);
+      if (isNaN(aval) || aval < 1 || aval > 5 || (aval * 10) % 5 !== 0) validation.avaliacao = 'Avaliação 1 a 5 passo 0.5';
+      if (!formData.preco || Number(formData.preco) <= 0) validation.preco = 'Preço > 0';
+      if (formData.descricao.length === 0 || formData.descricao.length > 2000) validation.descricao = 'Descrição obrigatória (<=2000)';
+      const qtd = parseInt(formData.quantidadeEstoque);
+      if (isNaN(qtd) || qtd < 0) validation.quantidadeEstoque = 'Quantidade inválida';
+      setErrors(validation);
+      if (Object.keys(validation).length > 0) { setLoading(false); return; }
+
+      const payload = {
+        nome: formData.nome,
+        avaliacao: formData.avaliacao ? Number(formData.avaliacao) : null,
         descricao: formData.descricao,
-        preco: parseFloat(formData.preco).toFixed(2),
-        qtdEstoque: parseInt(formData.qtdEstoque),
-        imagens: formData.imagens.map((img, i) => ({
-          nome: `img_${Date.now()}_${i}_${img.nomeOriginal}`,
-          principal: i === imagemPrincipal
-        }))
+        preco: Number(formData.preco),
+        quantidadeEstoque: qtd,
+        // Imagens ainda não são persistidas (backend não implementado). Placeholder:
+        imagens: []
       };
 
-      await axios.post('http://localhost:8080/produtos', produtoPayload);
+      await api.post('/produtos', payload);
       alert('Produto cadastrado com sucesso!');
-  navigate('/cadastroproduto');
+      navigate('/produtos');
     } catch (error) {
       console.error('Erro ao cadastrar produto:', error);
       alert('Erro ao cadastrar produto');
@@ -75,7 +85,7 @@ export default function CadastroProduto() {
   }
 
   function handleCancel() {
-  navigate('/cadastroproduto');
+  navigate('/produtos');
   }
 
   return (
@@ -92,17 +102,18 @@ export default function CadastroProduto() {
             <div className="form-grid">
 
               <div className="form-group">
-                <label htmlFor="nomeProduto">Nome do Produto *</label>
+                <label htmlFor="nome">Nome do Produto *</label>
                 <input
                   type="text"
-                  id="nomeProduto"
-                  name="nomeProduto"
+                  id="nome"
+                  name="nome"
                   maxLength={200}
-                  value={formData.nomeProduto}
+                  value={formData.nome}
                   onChange={handleInputChange}
                   required
                   placeholder="Digite o nome do produto"
                 />
+                {errors.nome && <span style={{color:'red', fontSize:12}}>{errors.nome}</span>}
               </div>
 
               <div className="form-group">
@@ -136,16 +147,17 @@ export default function CadastroProduto() {
               </div>
 
               <div className="form-group">
-                <label htmlFor="qtdEstoque">Qtd. em Estoque *</label>
+                <label htmlFor="quantidadeEstoque">Qtd. em Estoque *</label>
                 <input
                   type="number"
-                  id="qtdEstoque"
-                  name="qtdEstoque"
-                  value={formData.qtdEstoque}
+                  id="quantidadeEstoque"
+                  name="quantidadeEstoque"
+                  value={formData.quantidadeEstoque}
                   onChange={handleInputChange}
                   required
                   placeholder="Ex: 100"
                 />
+                {errors.quantidadeEstoque && <span style={{color:'red', fontSize:12}}>{errors.quantidadeEstoque}</span>}
               </div>
 
               <div className="form-group full-width">
@@ -159,6 +171,7 @@ export default function CadastroProduto() {
                   required
                   placeholder="Digite a descrição completa do produto"
                 />
+                {errors.descricao && <span style={{color:'red', fontSize:12}}>{errors.descricao}</span>}
               </div>
 
               <div className="form-group full-width">
