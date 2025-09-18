@@ -8,6 +8,7 @@ import CadastroProduto from './pages/backoffice/cadastroProduto';
 import { AuthProvider } from './context/AuthContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ListaProdutos from './pages/backoffice/listarProdutos/index.jsx';
+import VisualizarProduto from './pages/backoffice/visualizarProduto';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/editar-usuario/:id" element={<ProtectedRoute allowedGroups={["Administrador"]}><EditarUsuario /></ProtectedRoute>} />
           <Route path="/produtos" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><ListaProdutos /></ProtectedRoute>} />
           <Route path="/criar-produto" element={<ProtectedRoute allowedGroups={["Administrador"]}><CadastroProduto/></ProtectedRoute>} />
+          <Route path="/visualizar-produto/:id" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><VisualizarProduto/></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
