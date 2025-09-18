@@ -1,7 +1,15 @@
-.admin-page{
-  display: flex;
-  flex-direction: row;
 
-  height: 100vh;
-  width: 100vw;
+.admin-layout{
+  display:flex;
+}
+
+.admin-main{
+  margin-left:250px; 
+  width:100%;
+  min-height:100vh;
+  background:#f9fafb;
+}
+
+.page-content{
+  padding:100px 24px 24px;
 }

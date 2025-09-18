@@ -1,12 +1,15 @@
 import MenuLateral from "../../../components/menuLateral";
 import Header from "../../../components/header";
+import './index.css';
 
 export default function admpage(){
-return(
-    <div className="admin-page">
-      <MenuLateral />      
-      <div>
-        <Header nome={"Bem vindo ao Dashboard"}/>
+  return (
+    <div className="admin-layout">
+      <MenuLateral />
+      <div className="admin-main">
+        <Header nome={"Bem vindo ao Dashboard"} />
+        <div className="page-content">
+        </div>
       </div>
     </div>
   );
