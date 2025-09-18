@@ -7,10 +7,8 @@ import EditarUsuario from './pages/backoffice/editarUsuario/index.jsx';
 import CadastroProduto from './pages/backoffice/cadastroProduto';
 import { AuthProvider } from './context/AuthContext.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import ListaProdutos from './pages/backoffice/listarProdutos/index.jsx';
 
-function ListaProdutos() {
-  return <h1>Lista de Produtos</h1>;
-}
 
 function App() {
   return (
