@@ -1,5 +1,5 @@
 import './index.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
 import placeholder from '../../../assets/images/product-placeholder.svg';
@@ -16,6 +16,7 @@ export default function VisualizarProduto(){
   const [loading,setLoading] = useState(true);
   const [erro,setErro] = useState(null);
   const [imagemAtual,setImagemAtual] = useState(null);
+  const [indiceAtual,setIndiceAtual] = useState(0);
 
   useEffect(()=>{ buscar(); },[id]);
 
@@ -27,7 +28,11 @@ export default function VisualizarProduto(){
       setProduto(p);
       if(p.imagens && p.imagens.length>0){
         const principal = p.imagens.find(i=>i.imagemPrincipal) || p.imagens[0];
+        const idx = p.imagens.findIndex(i=>i.id===principal.id);
         setImagemAtual(principal);
+        setIndiceAtual(idx>=0? idx:0);
+      } else {
+        setIndiceAtual(0);
       }
       setErro(null);
     }catch(e){
@@ -41,37 +46,46 @@ export default function VisualizarProduto(){
     try{ return Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}catch(e){return v;}
   }
 
-  if(!user || (user.grupo !== 'Administrador' && user.grupo !== 'Estoquista')){
-    return <div className="loading-box">Acesso não autorizado</div>;
-  }
-
-  if(loading){
-    return <div className="loading-box">Carregando produto...</div>;
-  }
-
-  if(erro){
-    return <div className="erro-box">{erro}<br/><button onClick={buscar} className="voltar-btn">Tentar novamente</button></div>;
-  }
-
-  if(!produto){
-    return <div className="erro-box">Produto não encontrado</div>;
-  }
-
-  const imagens = produto.imagens || [];
-
+  // Derivar imagens sempre que produto mudar
+  const imagens = produto?.imagens || [];
   const baseURL = api.defaults.baseURL?.replace(/\/$/,'') || '';
+
+  const irPara = useCallback((novo)=>{
+    if(!imagens.length) return;
+    const total = imagens.length;
+    let idx = (novo + total) % total;
+    setIndiceAtual(idx);
+    setImagemAtual(imagens[idx]);
+  },[imagens]);
+
+  const prox = useCallback(()=>{ irPara(indiceAtual+1); },[irPara, indiceAtual]);
+  const anterior = useCallback(()=>{ irPara(indiceAtual-1); },[irPara, indiceAtual]);
+
+  useEffect(()=>{
+    function handleKey(e){
+      if(e.key==='ArrowRight') prox();
+      else if(e.key==='ArrowLeft') anterior();
+    }
+    window.addEventListener('keydown', handleKey);
+    return ()=> window.removeEventListener('keydown', handleKey);
+  },[prox, anterior]);
 
   function buildSrc(img){
     if(!img) return placeholder;
     const path = (img.diretorio || '') + img.nomeArquivo;
     if(/^https?:/i.test(path)) return path;
-    // garante uma única barra entre base e caminho
     return baseURL + (path.startsWith('/')? path : '/' + path);
   }
 
-  function handleImgError(ev){
-    ev.currentTarget.src = placeholder;
+  function handleImgError(ev){ ev.currentTarget.src = placeholder; }
+
+  // Após todos os hooks, fazer retornos condicionais
+  if(!user || (user.grupo !== 'Administrador' && user.grupo !== 'Estoquista')){
+    return <div className="loading-box">Acesso não autorizado</div>;
   }
+  if(loading){ return <div className="loading-box">Carregando produto...</div>; }
+  if(erro){ return <div className="erro-box">{erro}<br/><button onClick={buscar} className="voltar-btn">Tentar novamente</button></div>; }
+  if(!produto){ return <div className="erro-box">Produto não encontrado</div>; }
 
   return (
     <div className="admin-layout">
@@ -95,16 +109,29 @@ export default function VisualizarProduto(){
 
           <div className="produto-container">
             <div className="galeria-principal">
-              {imagemAtual || imagens.length>0 ? (
-                <img src={buildSrc(imagemAtual)} onError={handleImgError} alt={produto.nome} />
-              ) : (
-                <img src={placeholder} alt="placeholder" style={{opacity:.7}} />
+              <div className="carousel-wrapper">
+                {(imagemAtual || imagens.length>0) ? (
+                  <>
+                    <button className="nav prev" onClick={anterior} disabled={imagens.length<=1}>◀</button>
+                    <img src={buildSrc(imagemAtual)} onError={handleImgError} alt={produto.nome} />
+                    <button className="nav next" onClick={prox} disabled={imagens.length<=1}>▶</button>
+                  </>
+                ) : (
+                  <img src={placeholder} alt="placeholder" style={{opacity:.7}} />
+                )}
+              </div>
+              {imagens.length>1 && (
+                <div style={{display:'flex',justifyContent:'center',gap:6,fontSize:11,color:'#555'}}>
+                  {imagens.map((_,i)=>(
+                    <span key={i} style={{width:8,height:8,borderRadius:'50%',background:i===indiceAtual?'#2563eb':'#cbd5e1',display:'inline-block'}} />
+                  ))}
+                </div>
               )}
               {imagens.length>1 && (
                 <div className="thumbs">
                   {imagens.map(img => (
                     <button key={img.id} className={imagemAtual && imagemAtual.id===img.id? 'active':''}
-                      onClick={()=>setImagemAtual(img)}>
+                      onClick={()=>{setImagemAtual(img); setIndiceAtual(imagens.findIndex(i=>i.id===img.id));}}>
                       <img src={buildSrc(img)} onError={handleImgError} alt="thumb" />
                     </button>
                   ))}

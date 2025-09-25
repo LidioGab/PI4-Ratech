@@ -15,6 +15,9 @@ export default function MenuLateral() {
           <li>
             <Link to="/produtos">Lista de Produtos</Link>
           </li>
+          <li>
+            <Link to="/admdashboard">Dashboard</Link>
+          </li>
         </ul>
       </nav>
     </div>

@@ -74,6 +74,14 @@
   background: #f9fafb
 }
 
+.carousel-wrapper{position:relative;display:flex;align-items:center;justify-content:center}
+.carousel-wrapper img{z-index:1}
+.carousel-wrapper .nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.45);color:#fff;border:none;padding:6px 10px;cursor:pointer;border-radius:6px;font-size:14px;z-index:2;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.carousel-wrapper .nav:hover:not(:disabled){background:rgba(0,0,0,.6)}
+.carousel-wrapper .nav:disabled{opacity:.3;cursor:default}
+.carousel-wrapper .prev{left:8px}
+.carousel-wrapper .next{right:8px}
+
 .thumbs {
   display: flex;
   flex-wrap: wrap;

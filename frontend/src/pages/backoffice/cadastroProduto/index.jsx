@@ -89,8 +89,8 @@ export default function CadastroProduto() {
         }
       }
 
-      alert('Produto cadastrado com sucesso!');
-      navigate('/produtos');
+  alert('Produto cadastrado com sucesso!');
+  navigate(`/visualizar-produto/${produtoId}`);
     } catch (error) {
       console.error('Erro ao cadastrar produto:', error);
       alert('Erro ao cadastrar produto');

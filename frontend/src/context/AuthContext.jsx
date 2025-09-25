@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import api from '../services/api';
+import { hashPasswordClientSide } from '../utils/security.js';
 
 const AuthContext = createContext(null);
 
@@ -16,7 +17,9 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function login(email, senha) {
-    const body = { email, senha };
+    // Hash client-side to meet sprint requirement. We send both for backward compatibility.
+    const senhaHash = await hashPasswordClientSide(senha);
+    const body = { email, senha, senhaHash };
     const { data } = await api.post('/login', body);
     setUser(data);
     localStorage.setItem('sessionUser', JSON.stringify(data));
