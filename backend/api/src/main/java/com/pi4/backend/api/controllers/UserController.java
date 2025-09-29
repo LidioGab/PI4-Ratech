@@ -1,19 +1,27 @@
 package com.pi4.backend.api.controllers;
 
-import com.pi4.backend.api.entities.Grupo;
-import com.pi4.backend.api.entities.Usuario;
-import com.pi4.backend.api.repositories.UserRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
+import com.pi4.backend.api.entities.Grupo;
+import com.pi4.backend.api.entities.Usuario;
+import com.pi4.backend.api.repositories.UserRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -85,7 +93,9 @@ public class UserController {
     usuario.setCpf(dto.getCpf());
     usuario.setGrupo(grupo);
     usuario.setStatus(true); // status inicial ativo
-    usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
+  // dto.senha contém a senha em texto (compatibilidade). dto.senhaHash pode conter SHA-256 client-side.
+  // Mantemos bcrypt(server-side) sobre a senha original.
+  usuario.setSenha(passwordEncoder.encode(dto.getSenha()));
     userRepository.save(usuario);
     return ResponseEntity.status(HttpStatus.CREATED).body(usuario.getId());
   }
@@ -128,7 +138,7 @@ public class UserController {
       return ResponseEntity.badRequest().body("Senhas não conferem");
     }
     Usuario usuario = opt.get();
-    usuario.setSenha(passwordEncoder.encode(dto.getNovaSenha()));
+  usuario.setSenha(passwordEncoder.encode(dto.getNovaSenha()));
     userRepository.save(usuario);
     return ResponseEntity.ok("Senha alterada");
   }
@@ -152,6 +162,7 @@ public class UserController {
     private String senha;
     private String confirmacaoSenha;
     private String grupo;
+    private String senhaHash; // opcional: SHA-256 client-side
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getCpf() { return cpf; }
@@ -164,6 +175,8 @@ public class UserController {
     public void setConfirmacaoSenha(String confirmacaoSenha) { this.confirmacaoSenha = confirmacaoSenha; }
     public String getGrupo() { return grupo; }
     public void setGrupo(String grupo) { this.grupo = grupo; }
+    public String getSenhaHash() { return senhaHash; }
+    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
   }
 
   public static class AtualizarUsuarioDto {
@@ -181,9 +194,12 @@ public class UserController {
   public static class AlterarSenhaDto {
     private String novaSenha;
     private String confirmacao;
+    private String senhaHash; // opcional
     public String getNovaSenha() { return novaSenha; }
     public void setNovaSenha(String novaSenha) { this.novaSenha = novaSenha; }
     public String getConfirmacao() { return confirmacao; }
     public void setConfirmacao(String confirmacao) { this.confirmacao = confirmacao; }
+    public String getSenhaHash() { return senhaHash; }
+    public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
   }
 }

@@ -45,7 +45,13 @@ public class loginController {
         }
         boolean passwordOk = false;
         try {
-            passwordOk = passwordEncoder.matches(loginDto.getSenha(), usuario.getSenha());
+            // Estratégia: se senhaHash (SHA-256 no frontend) for enviada, tentamos comparar bcrypt armazenado com a senha original.
+            // Como não temos a senha original, fazemos fallback para comparar usando o valor plano recebido.
+            // Caso futuro: armazenar também hash SHA-256(bcrypt) permitiria double-hash.
+            if (loginDto.getSenha() != null) {
+                passwordOk = passwordEncoder.matches(loginDto.getSenha(), usuario.getSenha());
+            }
+            // Se envio incluir senhaHash mas comparação com senha falhou, podemos tentar heurística: gerar SHA-256 local da string candidata? (não aplicável sem original)
         } catch (Exception e) {
             log.error("Erro comparando senha", e);
         }
@@ -65,11 +71,14 @@ public class loginController {
 
     public static class LoginDto {
         private String email;
-        private String senha;
+        private String senha; // plaintext (para compatibilidade)
+        private String senhaHash; // SHA-256 produzido no frontend
         public String getEmail() { return email; }
         public void setEmail(String email) { this.email = email; }
         public String getSenha() { return senha; }
         public void setSenha(String senha) { this.senha = senha; }
+        public String getSenhaHash() { return senhaHash; }
+        public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
     }
 
     public static class SessionDto {

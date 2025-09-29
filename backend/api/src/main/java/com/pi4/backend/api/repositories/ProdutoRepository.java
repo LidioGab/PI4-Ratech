@@ -1,5 +1,7 @@
 package com.pi4.backend.api.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +12,8 @@ import com.pi4.backend.api.entities.Produto;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 	Page<Produto> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
+	
+	// Métodos para dashboard
+	List<Produto> findByQuantidadeEstoqueLessThanEqualOrderByQuantidadeEstoqueAsc(Integer quantidade);
+	List<Produto> findTop5ByOrderByPrecoDesc();
 }
