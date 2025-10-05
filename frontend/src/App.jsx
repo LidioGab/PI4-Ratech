@@ -11,6 +11,7 @@ import ListaProdutos from './pages/backoffice/listarProdutos/index.jsx';
 import VisualizarProduto from './pages/backoffice/visualizarProduto';
 import EditarProduto from './pages/backoffice/editarProduto';
 import PaginaInicial from './pages/frontoffice/paginaInicial/index.jsx';
+import ListarProdutosFrontoffice from './pages/frontoffice/listarProdutos/index.jsx';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<PaginaInicial/>}/>
+          <Route path="/produtos-loja" element={<ListarProdutosFrontoffice/>}/>
           <Route path="/loginAdm" element={<LoginAdmPage/>} />
           <Route path="/admdashboard" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/usuarios" element={<ProtectedRoute allowedGroups={["Administrador"]}><ListarUsuarios /></ProtectedRoute>} />

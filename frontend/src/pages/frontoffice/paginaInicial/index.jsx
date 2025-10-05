@@ -24,11 +24,16 @@ export default function PaginaInicial(){
   }, [])
 
 
-  // Divide os produtos em "páginas" de 5 cards
   const chunkSize = 5;
   const cardChunks = [];
   for (let i = 0; i < melhoresAvaliados.length; i += chunkSize) {
-    cardChunks.push(melhoresAvaliados.slice(i, i + chunkSize));
+    const chunk = melhoresAvaliados.slice(i, i + chunkSize);
+    while (chunk.length < chunkSize && cardChunks.length === 0) {
+      break;
+    }
+    if (chunk.length > 0) {
+      cardChunks.push(chunk);
+    }
   }
 
   return(

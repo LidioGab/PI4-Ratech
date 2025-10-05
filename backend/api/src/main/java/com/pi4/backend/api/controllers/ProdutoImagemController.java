@@ -27,7 +27,7 @@ import com.pi4.backend.api.services.ImagemStorageService;
 import com.pi4.backend.api.services.ImagemStorageService.StoredImage;
 
 @RestController
-@RequestMapping("/produtos/{id}/imagens")
+@RequestMapping("/produtos/{id:[0-9]+}/imagens")
 public class ProdutoImagemController {
 
     private static final Logger log = LoggerFactory.getLogger(ProdutoImagemController.class);
@@ -94,7 +94,7 @@ public class ProdutoImagemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(salvas);
     }
 
-    @PutMapping("/{idImagem}/principal")
+    @PutMapping("/{idImagem:[0-9]+}/principal")
     @Transactional
     public ResponseEntity<?> definirPrincipal(@PathVariable("id") Long produtoId,
                                               @PathVariable("idImagem") Long idImagem) {
@@ -117,7 +117,7 @@ public class ProdutoImagemController {
         return ResponseEntity.ok(img);
     }
 
-    @DeleteMapping("/{idImagem}")
+    @DeleteMapping("/{idImagem:[0-9]+}")
     @Transactional
     public ResponseEntity<?> remover(@PathVariable("id") Long produtoId,
                                      @PathVariable("idImagem") Long idImagem) {

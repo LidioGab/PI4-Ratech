@@ -18,8 +18,8 @@ export default function EditarProduto(){
   const [form,setForm] = useState({nome:'',preco:'',avaliacao:'',quantidadeEstoque:'',descricao:'',status:true});
   const [errors,setErrors] = useState({});
   const [uploading,setUploading] = useState(false);
-  const [novasImagens,setNovasImagens] = useState([]); // {file,urlPreview}
-  const [principalUpload,setPrincipalUpload] = useState(null); // index dentro de novasImagens
+  const [novasImagens,setNovasImagens] = useState([]);
+  const [principalUpload,setPrincipalUpload] = useState(null);
 
   const isAdmin = user?.grupo === 'Administrador';
   const isEstoquista = user?.grupo === 'Estoquista';
@@ -98,7 +98,6 @@ export default function EditarProduto(){
         payload.quantidadeEstoque = parseInt(form.quantidadeEstoque);
       }
       const resp = await api.put(`/produtos/${id}`, payload);
-      // se houver novas imagens, enviar depois de atualizar produto
       if(isAdmin && novasImagens.length){
         setUploading(true);
         const formData = new FormData();
@@ -142,7 +141,7 @@ export default function EditarProduto(){
   }
   
   function imagemUrl(img){
-    if(!img) return '';
+    if(!img) return placeholder;
     if(img.urlPreview) return img.urlPreview; 
     if(img.diretorio && img.nomeArquivo){
       let dir = img.diretorio.replace(/\\/g,'/');
@@ -154,7 +153,11 @@ export default function EditarProduto(){
       dir = dir.replace(/^\//,'');
       return `${api.defaults.baseURL}/uploads/${dir}${img.nomeArquivo}`;
     }
-    return '';
+    return placeholder;
+  }
+  
+  function handleImgError(ev){ 
+    ev.currentTarget.src = placeholder; 
   }
 
   async function definirPrincipal(imagemId){
@@ -192,13 +195,13 @@ export default function EditarProduto(){
               {produto?.imagens?.length ? (
                 <>
                   <div className="imagem-item-large" style={{marginBottom:16}}>
-                    <img src={imagemUrl(produto.imagens[0])} alt="principal" onError={e=>{e.target.src='/placeholder.svg';}} />
+                    <img src={imagemUrl(produto.imagens[0])} alt="principal" onError={handleImgError} />
                     {produto.imagens[0].imagemPrincipal && <span className="principal-badge" style={{top:8,left:8}}>Principal</span>}
                   </div>
                   <div className="grid-thumbs" style={{marginBottom:20}}>
                     {produto.imagens.map(img=> (
                       <div key={img.id} className={"thumb "+(img.imagemPrincipal? 'principal':'')} onClick={()=>!img.imagemPrincipal && definirPrincipal(img.id)}>
-                        <img src={imagemUrl(img)} alt="thumb" onError={e=>{e.target.src='/placeholder.svg';}} />
+                        <img src={imagemUrl(img)} alt="thumb" onError={handleImgError} />
                         {img.imagemPrincipal && <span className="badge">Principal</span>}
                       </div>
                     ))}

@@ -39,7 +39,6 @@
   margin: 0;
 }
 
-/* Cards de Estatísticas */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -107,7 +106,6 @@
   font-weight: 500;
 }
 
-/* Seção Status e Críticos */
 .status-criticos-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -165,7 +163,6 @@
   background: #ef4444;
 }
 
-/* Produtos Críticos */
 .criticos-card {
   background: white;
   border-radius: 12px;
@@ -242,7 +239,6 @@
 
 
 
-/* Loading */
 .loading-dashboard {
   display: flex;
   flex-direction: column;
@@ -271,7 +267,6 @@
   font-size: 1rem;
 }
 
-/* Responsividade */
 @media (max-width: 1200px) {
   .admin-main {
     margin-left: 220px;
@@ -296,7 +291,6 @@
     gap: 12px;
   }
   
-  /* Layout móvel - seção status e críticos em coluna */
   .status-criticos-section {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -338,7 +332,6 @@
   }
 }
 
-/* Tablet responsivo */
 @media (max-width: 1024px) and (min-width: 769px) {
   .status-criticos-section {
     gap: 20px;

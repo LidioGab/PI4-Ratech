@@ -46,7 +46,6 @@ export default function VisualizarProduto(){
     try{ return Number(v).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}catch(e){return v;}
   }
 
-  // Derivar imagens sempre que produto mudar
   const imagens = produto?.imagens || [];
   const baseURL = api.defaults.baseURL?.replace(/\/$/,'') || '';
 
@@ -79,7 +78,6 @@ export default function VisualizarProduto(){
 
   function handleImgError(ev){ ev.currentTarget.src = placeholder; }
 
-  // Após todos os hooks, fazer retornos condicionais
   if(!user || (user.grupo !== 'Administrador' && user.grupo !== 'Estoquista')){
     return <div className="loading-box">Acesso não autorizado</div>;
   }
