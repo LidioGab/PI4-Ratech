@@ -1,0 +1,75 @@
+.card-melhoresAvaliados {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  max-width: 260px;
+  min-width: 220px;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 16px;
+  transition: box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.card-melhoresAvaliados:hover {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.16);
+}
+
+.card-img-wrapper {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f6f6f6;
+  overflow: hidden;
+}
+
+.card-img-wrapper img {
+  max-width: 90%;
+  max-height: 160px;
+  object-fit: contain;
+}
+
+.card-info {
+  padding: 16px 12px 12px 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 6px;
+}
+
+.card-desc {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 12px;
+  min-height: 40px;
+}
+
+.card-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.card-preco {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1a8917;
+}
+
+.card-avaliacao {
+  font-size: 1rem;
+  color: #f7b500;
+  font-weight: 500;
+}

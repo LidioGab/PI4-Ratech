@@ -1,6 +1,7 @@
 package com.pi4.backend.api.controllers;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -49,6 +50,11 @@ public class ProdutoController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/todos")
+    public List<Produto> todosProdutos() {
+        return this.repository.findAll();
+    }
+    
     @GetMapping("/{id}")
     public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
         return repository.findById(id)
