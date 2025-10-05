@@ -241,11 +241,7 @@
   font-weight: 500;
 }
 
-/* thumbs antigo substituído */
 
-/* removido: .imagem-item antigo */
-
-/* removido: imagem-item img antigo */
 
 .imagem-item .principal-flag {
   position: absolute;
@@ -493,7 +489,7 @@
   align-items: center
 }
 
-/* Regras antigas de media queries removidas - nova estrutura responsiva aplicada */
+
 
 .loading-box {
   padding: 60px 20px;

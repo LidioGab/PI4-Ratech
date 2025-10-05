@@ -1,6 +1,7 @@
 package com.pi4.backend.api.controllers;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,21 +36,47 @@ public class ProdutoController {
     public ResponseEntity<Page<Produto>> listar(
             @RequestParam(value = "q", required = false) String query,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "status", required = false) Boolean status,
+            @RequestParam(value = "sort", required = false) String sortParam) {
 
-        size = 10;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+        // Construir Sort
+        Sort sort = Sort.by(Sort.Direction.DESC, "id"); // default
+        if (sortParam != null && !sortParam.isBlank()) {
+            String[] parts = sortParam.split(",");
+            if (parts.length == 2) {
+                String field = parts[0];
+                String direction = parts[1];
+                Sort.Direction dir = "asc".equalsIgnoreCase(direction) ? Sort.Direction.ASC : Sort.Direction.DESC;
+                sort = Sort.by(dir, field);
+            }
+        }
+        
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<Produto> result;
         if (query != null && !query.isBlank()) {
-            result = repository.findByNomeContainingIgnoreCase(query.trim(), pageable);
+            if (status != null) {
+                result = repository.findByNomeContainingIgnoreCaseAndStatus(query.trim(), status, pageable);
+            } else {
+                result = repository.findByNomeContainingIgnoreCase(query.trim(), pageable);
+            }
         } else {
-            result = repository.findAll(pageable);
+            if (status != null) {
+                result = repository.findByStatus(status, pageable);
+            } else {
+                result = repository.findAll(pageable);
+            }
         }
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/todos")
+    public List<Produto> todosProdutos() {
+        return this.repository.findAll();
+    }
+    
+    @GetMapping("/{id:[0-9]+}")
     public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
         return repository.findById(id)
                 .map(ResponseEntity::ok)
@@ -76,7 +103,7 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(produto));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id:[0-9]+}")
     public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produtoAtualizado) {
         var opt = repository.findById(id);
         if (opt.isEmpty()) {
@@ -106,7 +133,7 @@ public class ProdutoController {
         return ResponseEntity.ok(salvo);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:[0-9]+}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
         if (!repository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -115,7 +142,7 @@ public class ProdutoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}/status")
+    @PutMapping("/{id:[0-9]+}/status")
     public ResponseEntity<Produto> toggleStatus(@PathVariable Long id) {
         return repository.findById(id).map(p -> {
             p.setStatus(!Boolean.TRUE.equals(p.getStatus()));

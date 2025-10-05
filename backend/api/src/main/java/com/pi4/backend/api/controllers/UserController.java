@@ -54,7 +54,7 @@ public class UserController {
   public List<Usuario> listar() { return userRepository.findAll(); }
 
   // DETALHAR
-  @GetMapping("/{id}")
+  @GetMapping("/{id:[0-9]+}")
   public ResponseEntity<?> obter(@PathVariable Integer id) {
     return userRepository.findById(id)
         .<ResponseEntity<?>>map(ResponseEntity::ok)
@@ -101,7 +101,7 @@ public class UserController {
   }
 
   // ALTERAR DADOS (sem email e senha)
-  @PutMapping("/{id}")
+  @PutMapping("/{id:[0-9]+}")
   public ResponseEntity<?> atualizar(@PathVariable Integer id, @RequestBody AtualizarUsuarioDto dto) {
     Optional<Usuario> opt = userRepository.findById(id);
     if (opt.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
@@ -127,7 +127,7 @@ public class UserController {
   }
 
   // ALTERAR SENHA
-  @PutMapping("/{id}/senha")
+  @PutMapping("/{id:[0-9]+}/senha")
   public ResponseEntity<?> alterarSenha(@PathVariable Integer id, @RequestBody AlterarSenhaDto dto) {
     Optional<Usuario> opt = userRepository.findById(id);
     if (opt.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
@@ -144,7 +144,7 @@ public class UserController {
   }
 
   // ATIVAR / DESATIVAR
-  @PutMapping("/{id}/status")
+  @PutMapping("/{id:[0-9]+}/status")
   public ResponseEntity<?> alterarStatus(@PathVariable Integer id) {
     Optional<Usuario> opt = userRepository.findById(id);
     if (opt.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");

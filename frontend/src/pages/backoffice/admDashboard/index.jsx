@@ -51,16 +51,14 @@ export default function admpage(){
     try {
       setStats(prev => ({ ...prev, loading: true }));
       
-      // Buscar estatísticas do novo endpoint
       const statsResp = await api.get('/dashboard/estatisticas');
       const statsData = statsResp.data;
       
-      // Buscar produtos críticos se necessário
       let produtosCriticos = [];
       if (statsData.baixoEstoque > 0) {
         try {
           const criticosResp = await api.get('/dashboard/produtos-criticos');
-          produtosCriticos = criticosResp.data.slice(0, 5); // Limitar a 5
+          produtosCriticos = criticosResp.data.slice(0, 5);
         } catch (e) {
           console.warn('Erro ao buscar produtos críticos:', e);
         }
@@ -137,7 +135,6 @@ export default function admpage(){
               <p>Visão geral do sistema</p>
             </div>
 
-            {/* Cards Principais */}
             <div className="stats-grid">
               <div className="stat-card">
                 <div className="stat-icon products">
@@ -192,7 +189,6 @@ export default function admpage(){
               )}
             </div>
 
-            {/* Seção Status e Produtos Críticos */}
             <div className="status-criticos-section">
               <div className="chart-card">
                 <h3>Status dos Produtos</h3>
@@ -211,7 +207,6 @@ export default function admpage(){
                 </div>
               </div>
 
-              {/* Lista de Produtos Críticos */}
               {stats.produtosCriticos.length > 0 && (
                 <div className="criticos-card">
                   <h3>⚠️ Produtos com Estoque Crítico</h3>
