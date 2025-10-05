@@ -1,5 +1,4 @@
-/* Layout padrão */
-.admin-layout {
+.admin-layout{
   width: 100vw;
   height: 100vh;
   display: flex;

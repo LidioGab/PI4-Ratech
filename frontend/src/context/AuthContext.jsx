@@ -17,7 +17,6 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function login(email, senha) {
-    // Hash client-side to meet sprint requirement. We send both for backward compatibility.
     const senhaHash = await hashPasswordClientSide(senha);
     const body = { email, senha, senhaHash };
     const { data } = await api.post('/login', body);
