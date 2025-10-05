@@ -10,6 +10,8 @@ import ProtectedRoute from './components/ProtectedRoute.jsx';
 import ListaProdutos from './pages/backoffice/listarProdutos/index.jsx';
 import VisualizarProduto from './pages/backoffice/visualizarProduto';
 import EditarProduto from './pages/backoffice/editarProduto';
+import DetalhesProduto from './pages/backoffice/detalhesProduto';
+
 
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
           <Route path="/criar-produto" element={<ProtectedRoute allowedGroups={["Administrador"]}><CadastroProduto/></ProtectedRoute>} />
           <Route path="/visualizar-produto/:id" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><VisualizarProduto/></ProtectedRoute>} />
           <Route path="/editar-produto/:id" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><EditarProduto/></ProtectedRoute>} />
+          <Route path="/detalhes-produto" element={<DetalhesProduto />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
