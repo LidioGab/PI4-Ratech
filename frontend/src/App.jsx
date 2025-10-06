@@ -12,9 +12,14 @@ import VisualizarProduto from './pages/backoffice/visualizarProduto';
 import EditarProduto from './pages/backoffice/editarProduto';
 import DetalhesProduto from './pages/backoffice/detalhesProduto';
 
-
 import PaginaInicial from './pages/frontoffice/paginaInicial/index.jsx';
 import ListarProdutosFrontoffice from './pages/frontoffice/listarProdutos/index.jsx';
+
+
+
+import FreteCalculator from './components/FreteCalculator.jsx';
+
+
 
 function App() {
   return (
@@ -34,6 +39,13 @@ function App() {
           <Route path="/editar-produto/:id" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><EditarProduto/></ProtectedRoute>} />
           <Route path="/detalhes-produto" element={<DetalhesProduto />} />
         </Routes>
+
+
+
+
+        <FreteCalculator />
+
+
       </BrowserRouter>
     </AuthProvider>
   );
