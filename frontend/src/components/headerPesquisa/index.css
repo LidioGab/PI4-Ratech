@@ -95,6 +95,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .icon-btn:hover {
@@ -104,6 +105,28 @@
 .icon-btn img {
   height: 35px;
   width: 35px;
+}
+
+.cart-btn {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: #f97316;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #333131;
+  min-width: 18px;
 }
 
 @media (max-width: 768px) {

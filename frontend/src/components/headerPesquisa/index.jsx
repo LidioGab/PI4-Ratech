@@ -6,11 +6,13 @@ import conta from '../../assets/images/conta.png'
 
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
 
 export default function HeaderPesquisa(){
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [termoBusca, setTermoBusca] = useState(searchParams.get('q') || '');
+  const { getTotalItems, toggleCart } = useCart();
 
   function handleSearch(e) {
     e.preventDefault();
@@ -26,6 +28,8 @@ export default function HeaderPesquisa(){
       handleSearch(e);
     }
   }
+
+  const totalItems = getTotalItems();
 
   return(
     <div className='pag-headerPesquisa'>
@@ -52,8 +56,11 @@ export default function HeaderPesquisa(){
         <button className='icon-btn'>
           <img src={conta} alt="Minha conta" />
         </button>
-        <button className='icon-btn'>
+        <button className='icon-btn cart-btn' onClick={toggleCart}>
           <img src={carrinho} alt="Carrinho" />
+          {totalItems > 0 && (
+            <span className='cart-badge'>{totalItems}</span>
+          )}
         </button>
       </div>
     </div>

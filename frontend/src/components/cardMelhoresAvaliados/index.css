@@ -119,13 +119,30 @@
   gap: 6px;
 }
 
-.card-add-to-cart:hover {
+.card-add-to-cart:hover:not(:disabled) {
   background: #4b5563;
   transform: translateY(-1px);
 }
 
-.card-add-to-cart:active {
+.card-add-to-cart:active:not(:disabled) {
   transform: translateY(0);
+}
+
+.card-add-to-cart:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.6;
+}
+
+.card-add-to-cart.in-cart {
+  background: #059669;
+  border-color: #059669;
+}
+
+.card-add-to-cart.in-cart:hover:not(:disabled) {
+  background: #047857;
+  transform: translateY(-1px);
 }
 
 .card-preco {
