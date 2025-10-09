@@ -13,10 +13,15 @@ import VisualizarProduto from './pages/backoffice/visualizarProduto';
 import EditarProduto from './pages/backoffice/editarProduto';
 import DetalhesProduto from './pages/backoffice/detalhesProduto';
 
-
 import PaginaInicial from './pages/frontoffice/paginaInicial/index.jsx';
 import ListarProdutosFrontoffice from './pages/frontoffice/listarProdutos/index.jsx';
 import MenuLateralCarrinho from './components/menuLateralCarrinho/index.jsx';
+
+
+
+import FreteCalculator from './components/FreteCalculator.jsx';
+
+
 
 function App() {
   return (
