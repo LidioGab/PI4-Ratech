@@ -300,6 +300,76 @@
   font-weight: 500;
 }
 
+/* Calculadora de frete no carrinho */
+.frete-calculator-cart {
+  margin: 16px 0;
+}
+
+.frete-calculator-cart .frete-calculator {
+  background-color: #374151;
+  border: 1px solid #4b5563;
+}
+
+.frete-calculator-cart .frete-title {
+  color: #f3f4f6;
+}
+
+.frete-calculator-cart .opcoes-title {
+  color: #f3f4f6;
+}
+
+.frete-calculator-cart .cep-input {
+  background-color: #4b5563;
+  border-color: #6b7280;
+  color: #f3f4f6;
+}
+
+.frete-calculator-cart .cep-input::placeholder {
+  color: #9ca3af;
+}
+
+.frete-calculator-cart .cep-input:focus {
+  border-color: #3b82f6;
+  background-color: #374151;
+}
+
+.frete-calculator-cart .opcao-frete {
+  background-color: #4b5563;
+  border-color: #6b7280;
+}
+
+.frete-calculator-cart .opcao-frete:hover {
+  border-color: #9ca3af;
+  background-color: #374151;
+}
+
+.frete-calculator-cart .opcao-frete:has(.radio-input:checked) {
+  border-color: #3b82f6;
+  background-color: #1e3a8a;
+}
+
+.frete-calculator-cart .tipo-frete {
+  color: #f3f4f6;
+}
+
+.frete-calculator-cart .breakdown-item {
+  color: #d1d5db;
+}
+
+.frete-calculator-cart .breakdown-total {
+  color: #f3f4f6;
+  border-top-color: #6b7280;
+}
+
+.frete-calculator-cart .subtotal-info {
+  background-color: #4b5563;
+  color: #d1d5db;
+}
+
+.frete-calculator-cart .total-section {
+  border-top-color: #6b7280;
+}
+
 .cart-actions {
   display: flex;
   flex-direction: column;

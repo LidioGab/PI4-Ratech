@@ -1,0 +1,217 @@
+/* Componente de Cálculo de Frete */
+.frete-calculator {
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+  font-family: inherit;
+}
+
+.frete-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.subtotal-info {
+  padding: 8px 12px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.cep-input-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cep-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  background-color: white;
+  transition: border-color 0.2s ease;
+}
+
+.cep-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.cep-input::placeholder {
+  color: #9ca3af;
+}
+
+.calcular-btn {
+  padding: 8px 16px;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calcular-btn:hover:not(:disabled) {
+  background-color: #4b5563;
+  transform: translateY(-1px);
+}
+
+.calcular-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-message {
+  padding: 8px 12px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #dc2626;
+}
+
+.opcoes-frete {
+  margin-top: 12px;
+}
+
+.opcoes-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 8px 0;
+}
+
+.opcoes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.opcao-frete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: white;
+}
+
+.opcao-frete:hover {
+  border-color: #d1d5db;
+  background-color: #f9fafb;
+}
+
+.opcao-frete:has(.radio-input:checked) {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+}
+
+.radio-input {
+  margin: 0;
+  accent-color: #3b82f6;
+}
+
+.opcao-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.tipo-frete {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  text-transform: capitalize;
+}
+
+.valor-frete {
+  font-size: 14px;
+  font-weight: 600;
+  color: #059669;
+}
+
+.total-section {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.total-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.breakdown-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #374151;
+  padding-top: 6px;
+  margin-top: 6px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .frete-calculator {
+    padding: 12px;
+  }
+  
+  .cep-input-group {
+    flex-direction: column;
+  }
+  
+  .calcular-btn {
+    width: 100%;
+  }
+  
+  .opcao-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}

@@ -92,9 +92,11 @@
 .card-bottom {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   margin-top: auto;
 }
+
+
 
 .card-price-rating {
   display: flex;
@@ -104,24 +106,26 @@
 
 .card-add-to-cart {
   width: 100%;
-  padding: 8px 16px;
+  padding: 10px 16px;
   background: #374151;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .card-add-to-cart:hover:not(:disabled) {
   background: #4b5563;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(55, 65, 81, 0.3);
 }
 
 .card-add-to-cart:active:not(:disabled) {
@@ -142,7 +146,8 @@
 
 .card-add-to-cart.in-cart:hover:not(:disabled) {
   background: #047857;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
 }
 
 .card-preco {

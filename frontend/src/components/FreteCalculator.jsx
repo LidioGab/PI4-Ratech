@@ -1,20 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { useCart } from '../context/CartContext';
+import './FreteCalculator.css';
 
-const SUBTOTAL_INICIAL = 120.0;
 const API_BASE_URL = 'http://localhost:8080/api/frete';
 
-const FreteCalculator = () => {
+const FreteCalculator = ({ showSubtotal = false }) => {
+    const { getSubtotal } = useCart();
     const [cep, setCep] = useState('');
     const [opcoesFrete, setOpcoesFrete] = useState(null);
     const [valorFreteSelecionado, setValorFreteSelecionado] = useState(0.0);
-    const [total, setTotal] = useState(SUBTOTAL_INICIAL);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const subtotal = getSubtotal();
 
     useEffect(() => {
-        setTotal(SUBTOTAL_INICIAL + valorFreteSelecionado);
-    }, [valorFreteSelecionado]);
+        // Reset frete quando o carrinho muda
+        if (!subtotal || subtotal === 0) {
+            setOpcoesFrete(null);
+            setValorFreteSelecionado(0);
+        }
+    }, [subtotal]);
 
     const calcularFrete = async () => {
         const cepLimpo = cep.replace(/[^0-9]/g, '');
@@ -55,50 +61,87 @@ const FreteCalculator = () => {
     };
 
     return (
-        <div style={{ padding: '20px', border: '1px solid #ddd' }}>
-            <h2>Calcular Frete</h2>
-            <p>Subtotal: R$ {SUBTOTAL_INICIAL.toFixed(2)}</p>
+        <div className="frete-calculator">
+            <h3 className="frete-title">📦 Calcular Frete e Prazo</h3>
 
+            {showSubtotal && subtotal > 0 && (
+                <div className="subtotal-info">
+                    <span>Subtotal: R$ {subtotal.toFixed(2).replace('.', ',')}</span>
+                </div>
+            )}
 
-            <input
-                type="text"
-                placeholder="Digite seu CEP"
-                maxLength="8"
-                value={cep}
-                onChange={(e) => setCep(e.target.value)}
-            />
-            <button onClick={calcularFrete} disabled={loading}>
-                {loading ? 'Calculando...' : 'Calcular Frete'}
-            </button>
+            <div className="cep-input-group">
+                <input
+                    type="text"
+                    placeholder="00000-000"
+                    maxLength="9"
+                    value={cep}
+                    onChange={(e) => {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length > 5) {
+                            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                        }
+                        setCep(value);
+                    }}
+                    className="cep-input"
+                />
+                <button onClick={calcularFrete} disabled={loading} className="calcular-btn">
+                    {loading ? (
+                        <span className="loading-spinner">⏳</span>
+                    ) : (
+                        'Calcular'
+                    )}
+                </button>
+            </div>
 
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-
+            {error && (
+                <div className="error-message">
+                    <span>❌ {error}</span>
+                </div>
+            )}
 
             {opcoesFrete && (
-                <div style={{ marginTop: '15px' }}>
-                    <h4>Opções:</h4>
-                    {Object.entries(opcoesFrete).map(([tipo, valor]) => (
-                        <div key={tipo}>
-                            <label>
+                <div className="opcoes-frete">
+                    <h4 className="opcoes-title">Opções de entrega:</h4>
+                    <div className="opcoes-list">
+                        {Object.entries(opcoesFrete).map(([tipo, valor]) => (
+                            <label key={tipo} className="opcao-frete">
                                 <input
                                     type="radio"
                                     name="frete"
                                     value={valor}
                                     onChange={handleFreteChange}
-
                                     checked={valorFreteSelecionado === valor}
+                                    className="radio-input"
                                 />
-                                **{tipo}**: R$ {valor.toFixed(2)}
+                                <div className="opcao-info">
+                                    <span className="tipo-frete">{tipo}</span>
+                                    <span className="valor-frete">R$ {valor.toFixed(2).replace('.', ',')}</span>
+                                </div>
                             </label>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             )}
 
-
-            <h3 style={{ marginTop: '20px' }}>
-                Total: R$ {total.toFixed(2)}
-            </h3>
+            {showSubtotal && valorFreteSelecionado > 0 && (
+                <div className="total-section">
+                    <div className="total-breakdown">
+                        <div className="breakdown-item">
+                            <span>Subtotal:</span>
+                            <span>R$ {subtotal.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <div className="breakdown-item">
+                            <span>Frete:</span>
+                            <span>R$ {valorFreteSelecionado.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <div className="breakdown-total">
+                            <span>Total:</span>
+                            <span>R$ {(subtotal + valorFreteSelecionado).toFixed(2).replace('.', ',')}</span>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import './index.css';
 import { useCart } from '../../context/CartContext';
 import { formatCurrency } from '../../utils/cart';
+import FreteCalculator from '../FreteCalculator';
 import api from '../../services/api';
 import placeholder from '../../assets/images/product-placeholder.svg';
 
@@ -136,35 +137,9 @@ export default function MenuLateralCarrinho() {
               </div>
 
               <div className="cart-footer">
-                <div className="cart-summary">
-                  <div className="summary-line">
-                    <span>Total de itens:</span>
-                    <span>{totalItems}</span>
-                  </div>
-                  <div className="summary-line">
-                    <span>Subtotal:</span>
-                    <span>{formatCurrency(subtotal)}</span>
-                  </div>
-                  <div className="summary-line">
-                    <span>{shippingInfo.descricao}:</span>
-                    <span>{shippingInfo.valor === 0 ? 'Grátis' : formatCurrency(shippingInfo.valor)}</span>
-                  </div>
-                  {shippingInfo.valor === 0 && subtotal < 200 && (
-                    <div className="free-shipping-info">
-                      <small>🎉 Parabéns! Você ganhou frete grátis!</small>
-                    </div>
-                  )}
-                  {shippingInfo.valor > 0 && (200 - subtotal) > 0 && (200 - subtotal) < 50 && (
-                    <div className="free-shipping-progress">
-                      <small>
-                        Faltam apenas {formatCurrency(200 - subtotal)} para ganhar frete grátis!
-                      </small>
-                    </div>
-                  )}
-                  <div className="summary-line total">
-                    <span>Total:</span>
-                    <span>{formatCurrency(total)}</span>
-                  </div>
+               
+                <div className="frete-calculator-cart">
+                  <FreteCalculator showSubtotal={true} />
                 </div>
 
                 <div className="cart-actions">

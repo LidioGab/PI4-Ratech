@@ -2,9 +2,11 @@ import './index.css'
 import api from '../../services/api'
 import placeholder from '../../assets/images/product-placeholder.svg'
 import { useCart } from '../../context/CartContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function melhoresAvaliados({produto}) {
   const { addToCart, isInCart, getItemQuantity, openCart } = useCart();
+  const navigate = useNavigate();
   const { nome, avaliacao, descricao, imagens, preco } = produto;
   
   const baseURL = api.defaults.baseURL?.replace(/\/$/,'') || '';
@@ -20,7 +22,9 @@ export default function melhoresAvaliados({produto}) {
     ev.currentTarget.src = placeholder; 
   }
 
-  function handleAddToCart() {
+  function handleAddToCart(e) {
+    e.stopPropagation(); // Previne a navegação quando clicar no botão
+    
     if (!produto?.quantidadeEstoque || produto.quantidadeEstoque <= 0) {
       alert('Produto fora de estoque');
       return;
@@ -35,6 +39,10 @@ export default function melhoresAvaliados({produto}) {
     addToCart(produto, 1);
     openCart(); // Abre o carrinho automaticamente
   }
+
+  function handleCardClick() {
+    navigate(`/produto/${produto.id}`);
+  }
   
   const primeiraImagem = Array.isArray(imagens) && imagens.length > 0 
     ? (imagens.find(i => i.imagemPrincipal) || imagens[0])
@@ -44,7 +52,7 @@ export default function melhoresAvaliados({produto}) {
   const quantidadeNoCarrinho = getItemQuantity(produto.id);
 
   return (
-    <section className="card-melhoresAvaliados">
+    <section className="card-melhoresAvaliados" onClick={handleCardClick} style={{cursor: 'pointer'}}>
       <div className="card-img-wrapper">
         <img 
           src={buildSrc(primeiraImagem)} 
@@ -70,9 +78,9 @@ export default function melhoresAvaliados({produto}) {
             disabled={!produto?.quantidadeEstoque || produto.quantidadeEstoque <= 0}
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17A2 2 0 0119 19A2 2 0 0117 21A2 2 0 0115 19A2 2 0 0117 17M9 19A2 2 0 0111 21A2 2 0 019 23A2 2 0 017 21A2 2 0 019 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17A2 2 0 0119 19A2 2 0 0117 21A2 2 0 0115 19A2 2 0 0117 17M9 19A2 2 0 0111 21A2 2 0 019 23A2 2 0 717 21A2 2 0 019 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-            {produtoNoCarrinho ? `No carrinho (${quantidadeNoCarrinho})` : 'Adicionar'}
+            {produtoNoCarrinho ? `No carrinho (${quantidadeNoCarrinho})` : 'Comprar'}
           </button>
         </div>
       </div>
