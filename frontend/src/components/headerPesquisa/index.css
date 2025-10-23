@@ -86,29 +86,7 @@
   gap: 12px;
 }
 
-.login-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 12px;
-  color: #d1d5db;
-}
 
-.login-text {
-  margin-bottom: 2px;
-}
-
-.login-link {
-  color: #fbbf24;
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.login-link:hover {
-  color: #f59e0b;
-  text-decoration: underline;
-}
 
 /* Responsividade */
 @media (max-width: 768px) {
@@ -119,10 +97,6 @@
   
   .pesquisa {
     width: 250px;
-  }
-  
-  .login-section {
-    display: none;
   }
   
   .account-carrinho {
@@ -247,4 +221,254 @@
     height: 28px;
     width: 28px;
   }
+}
+
+/* Estilos do Menu Lateral */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-top: 70px;
+}
+
+.menu-lateral-conta {
+  background: white;
+  width: 320px;
+  max-height: calc(100vh - 70px);
+  overflow-y: auto;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+}
+
+.menu-header h3 {
+  margin: 0;
+  color: #374151;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.menu-content {
+  padding: 20px;
+}
+
+/* Cliente logado */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+}
+
+.user-avatar {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.user-details h4 {
+  margin: 0 0 5px 0;
+  color: #374151;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.user-details p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.menu-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: #374151;
+  border-radius: 6px;
+  transition: all 0.2s;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+}
+
+.menu-option:hover {
+  background-color: #f3f4f6;
+  color: #f97316;
+}
+
+.menu-option span {
+  font-size: 16px;
+}
+
+.logout-option:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+/* Cliente não logado */
+.login-options {
+  text-align: center;
+}
+
+.login-options h4 {
+  margin: 0 0 20px 0;
+  color: #374151;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.menu-btn {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.login-btn {
+  background: #f97316;
+  color: white;
+}
+
+.login-btn:hover {
+  background: #ea580c;
+  transform: translateY(-1px);
+}
+
+.signup-text {
+  color: #6b7280;
+  font-size: 13px;
+  margin: 0;
+}
+
+.signup-text .signup-link {
+  color: #f97316;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.signup-text .signup-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsividade do menu */
+@media (max-width: 768px) {
+  .menu-lateral-conta {
+    width: 280px;
+  }
+  
+  .menu-overlay {
+    padding-top: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-lateral-conta {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .menu-overlay {
+    padding-top: 60px;
+    justify-content: center;
+  }
+  
+  .user-info {
+    padding: 12px;
+  }
+  
+  .user-avatar {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+}
+
+.account-btn {
+  position: relative;
+}
+
+.account-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #d1d5db;
+  transition: all 0.2s;
+}
+
+.account-btn:hover::after {
+  border-top-color: #fbbf24;
 }
