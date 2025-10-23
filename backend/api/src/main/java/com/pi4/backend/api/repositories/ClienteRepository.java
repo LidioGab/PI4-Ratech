@@ -1,0 +1,12 @@
+package com.pi4.backend.api.repositories;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.pi4.backend.api.entities.Cliente;
+
+@Repository
+public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
+    boolean existsByEmail(String email);
+    boolean existsByCpf(String cpf);
+}

@@ -39,6 +39,34 @@ create table if not exists tb_produto_imagem (
     foreign key (id_produto) references tb_produto(id_produto)
 );
 
+create table if not exists tb_cliente (
+    id_cliente int primary key auto_increment,
+    nome varchar(150) not null,
+    cpf varchar(14) not null unique,
+    email varchar(150) not null unique,
+    senha varchar(255) not null,
+    data_nascimento date not null,
+    genero enum('MASCULINO', 'FEMININO', 'OUTRO', 'PREFIRO_NAO_INFORMAR') not null,
+    status boolean not null default true,
+    data_criacao timestamp default current_timestamp
+);
+
+create table if not exists tb_endereco_cliente (
+    id_endereco int primary key auto_increment,
+    id_cliente int not null,
+    tipo enum('FATURAMENTO', 'ENTREGA') not null,
+    cep varchar(9) not null,
+    logradouro varchar(255) not null,
+    numero varchar(20) not null,
+    complemento varchar(100),
+    bairro varchar(100) not null,
+    cidade varchar(100) not null,
+    uf varchar(2) not null,
+    ativo boolean not null default true,
+    data_criacao timestamp default current_timestamp,
+    foreign key (id_cliente) references tb_cliente(id_cliente)
+);
+
 -- Inserts idempotentes para grupos
 insert into tb_grupo (nome)
 select * from (select 'Administrador' as nome) tmp
