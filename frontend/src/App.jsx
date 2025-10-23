@@ -16,6 +16,8 @@ import DetalhesProduto from './pages/backoffice/detalhesProduto';
 import PaginaInicial from './pages/frontoffice/paginaInicial/index.jsx';
 import ListarProdutosFrontoffice from './pages/frontoffice/listarProdutos/index.jsx';
 import DetalhesProdutoFrontoffice from './pages/frontoffice/detalhesProduto/index.jsx';
+import CadastroCliente from './pages/frontoffice/cadastroCliente/index.jsx';
+
 import MenuLateralCarrinho from './components/menuLateralCarrinho/index.jsx';
 
 
@@ -33,11 +35,8 @@ function App() {
             <Route path="/" element={<PaginaInicial/>}/>
             <Route path="/produtos-loja" element={<ListarProdutosFrontoffice/>}/>
             <Route path="/produto/:id" element={<DetalhesProdutoFrontoffice/>}/>
-
-
             <Route path="/login" element={<LoginPage/>} />
-
-
+            <Route path="/cadastro-cliente" element={<CadastroCliente/>}/>
             <Route path="/loginAdm" element={<LoginAdmPage/>} />
             <Route path="/admdashboard" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><AdminDashboard /></ProtectedRoute>} />
             <Route path="/usuarios" element={<ProtectedRoute allowedGroups={["Administrador"]}><ListarUsuarios /></ProtectedRoute>} />
