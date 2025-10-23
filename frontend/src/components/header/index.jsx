@@ -8,8 +8,13 @@ export default function Header({ nome }) {
   const navigate = useNavigate();
 
   function handleLogout() {
-    logout();
-    navigate('/');
+    const confirmar = window.confirm("Tem certeza que deseja sair?");
+    if (confirmar) {
+    
+      logout();
+      alert("Você saiu do sistema.");
+      navigate('/');
+    }
   }
 
   return (
