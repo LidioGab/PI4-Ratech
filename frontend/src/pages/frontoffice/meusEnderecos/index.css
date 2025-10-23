@@ -1,0 +1,12 @@
+.meus-enderecos-page { padding: 16px; }
+.meus-enderecos-page .container { display:flex; gap:24px; }
+.meus-enderecos-page .lista { flex:1; }
+.meus-enderecos-page .form { width:360px; }
+.meus-enderecos-form .row { margin-bottom:8px; display:flex; flex-direction:column; }
+.meus-enderecos-form label { font-weight:600; font-size:14px; }
+.meus-enderecos-form input { padding:8px; border:1px solid #ccc; border-radius:4px; }
+.meus-enderecos-page ul { list-style:none; padding:0; }
+.meus-enderecos-page li { padding:8px; border:1px solid #eee; margin-bottom:8px; border-radius:6px; }
+.meus-enderecos-page li.default { border-color: #0a84ff; background:#f0f8ff }
+.meus-enderecos-page .actions { margin-top:8px; }
+.meus-enderecos-page .error { color: #b00020; margin-bottom:8px; }

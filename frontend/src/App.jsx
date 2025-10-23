@@ -16,6 +16,7 @@ import DetalhesProduto from './pages/backoffice/detalhesProduto';
 import PaginaInicial from './pages/frontoffice/paginaInicial/index.jsx';
 import ListarProdutosFrontoffice from './pages/frontoffice/listarProdutos/index.jsx';
 import DetalhesProdutoFrontoffice from './pages/frontoffice/detalhesProduto/index.jsx';
+import MeusEnderecos from './pages/frontoffice/meusEnderecos/index.jsx';
 import MenuLateralCarrinho from './components/menuLateralCarrinho/index.jsx';
 
 
@@ -43,6 +44,7 @@ function App() {
             <Route path="/visualizar-produto/:id" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><VisualizarProduto/></ProtectedRoute>} />
             <Route path="/editar-produto/:id" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><EditarProduto/></ProtectedRoute>} />
             <Route path="/detalhes-produto" element={<DetalhesProduto />} />
+            <Route path="/meus-enderecos" element={<MeusEnderecos/>} />
           </Routes>
           <MenuLateralCarrinho />
         </BrowserRouter>
