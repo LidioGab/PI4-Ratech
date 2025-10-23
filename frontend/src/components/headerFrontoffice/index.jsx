@@ -27,6 +27,9 @@ export default function HeaderFrontoffice({ nome, showBackButton = false, backTo
         <h1>{nome}</h1>
       </div>
       <div className="header-right">
+        <button className="login-btn" onClick={() => navigate('/login')}>
+          Entrar
+        </button>
         <button className="signup-btn" onClick={() => navigate('/cadastro-cliente')}>
           Criar Conta
         </button>

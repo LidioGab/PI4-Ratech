@@ -1,85 +1,90 @@
-import React, { useState } from 'react';
+import './LoginPage.css';
+import HeaderFrontoffice from "../../../components/headerFrontoffice/index.jsx";
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FreteCalculator from '../../../components/FreteCalculator';
+import api from '../../../services/api.js';
 
-const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
-    const [erro, setErro] = useState('');
-    const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-    const API_URL = 'http://localhost:8080/login';
+  async function handleLogin(e) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    
+    try {
+      const response = await api.post('/login', { email, senha });
+      const data = response.data;
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setErro('');
-        setLoading(true);
+      // Verificar se é um cliente
+      if (data.grupo === 'Cliente') {
+        // Salvar sessão do cliente
+        localStorage.setItem('clienteSession', JSON.stringify(data));
+        alert('Login realizado com sucesso!');
+        navigate('/');
+      } else {
+        // Se não for cliente, não permitir login
+        setError('Esta página é apenas para clientes. Use o login administrativo.');
+      }
+    } catch (err) {
+      const msg = err?.response?.data || 'Falha no login';
+      setError(msg);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, senha })
-            });
+  return (
+    <div className="login-cliente-page w-full">
+      <HeaderFrontoffice nome="Faça seu login" showBackButton={true} />
+      
+      <section className='form-section w-full'>
+        <h1>Bem-vindo de volta!</h1>
+        <p className="subtitle">Faça login para continuar suas compras</p>
+        
+        <form onSubmit={handleLogin}>
+          <div className='form-inputs'>
+            <label htmlFor="email">Email</label>
+            <input 
+              type="email" 
+              id="email"
+              placeholder="Digite seu email"
+              value={email} 
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-            const data = await response.json();
+          <div className='form-inputs'>
+            <label htmlFor="senha">Senha</label>
+            <input 
+              type="password" 
+              id="senha"
+              placeholder="Digite sua senha"
+              value={senha} 
+              onChange={e => setSenha(e.target.value)}
+              required
+            />
+          </div>
 
-            if (!response.ok) {
-                const mensagem = data.message || "Erro desconhecido ao fazer login.";
-                throw new Error(mensagem);
-            }
+          {error && <div style={{color:'red', marginBottom:'8px'}}>{error}</div>}
+          
+          <button className="login-btn" type="submit" disabled={loading}>
+            {loading ? 'Entrando...' : 'Entrar'}
+          </button>
 
-            localStorage.setItem('userSession', JSON.stringify(data));
-            localStorage.setItem('authToken', data.grupo === 'Cliente' ? 'cliente_token_fake' : 'admin_token_fake');
-
-            navigate('/');
-
-        } catch (error) {
-            setErro(error.message);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div style={{ padding: '20px', maxWidth: '400px', margin: '50px auto', border: '1px solid #ddd' }}>
-            <h2>Acesse sua conta</h2>
-            <form onSubmit={handleLogin}>
-                {erro && <p style={{ color: 'red', textAlign: 'center' }}>{erro}</p>}
-
-                <label>Email:</label>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    placeholder="seu.email@exemplo.com"
-                    style={{ width: '100%', padding: '10px', marginBottom: '15px' }}
-                />
-
-                <label>Senha:</label>
-                <input
-                    type="password"
-                    value={senha}
-                    onChange={(e) => setSenha(e.target.value)}
-                    required
-                    placeholder="Sua senha"
-                    style={{ width: '100%', padding: '10px', marginBottom: '20px' }}
-                />
-
-                <button
-                    type="submit"
-                    disabled={loading}
-                    style={{ width: '100%', padding: '10px', background: 'navy', color: 'white', border: 'none' }}
-                >
-                    {loading ? 'Entrando...' : 'Entrar'}
-                </button>
-            </form>
-            {/*  */}
-            {/*  */}
-        </div>
-    );
-};
-
-export default LoginPage;
+          <div className="form-footer">
+            <a href="#" className="forgot-password">Esqueceu sua senha?</a>
+            <p className="signup-link">
+              Não tem uma conta? <a href="/cadastro-cliente">Cadastre-se aqui</a>
+            </p>
+          </div>
+        </form>
+      </section>
+    </div>
+  );
+}
