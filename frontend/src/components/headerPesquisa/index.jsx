@@ -55,7 +55,7 @@ export default function HeaderPesquisa(){
       <div className='account-carrinho'>
         <div className='login-section'>
           <span className='login-text'>Faça login ou</span>
-          <Link to="/loginAdm" className='login-link'>crie seu login</Link>
+          <Link to="/cadastro-cliente" className='login-link'>crie sua conta</Link>
         </div>
         <button className='icon-btn'>
           <img src={conta} alt="Minha conta" />

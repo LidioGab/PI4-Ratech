@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+.header-frontoffice {
+  height: 80px;
+  display: flex;
+  flex-direction: row;
+  padding: 10px 20px;
+  width: 100%;
+  background-color: white;
+  border-bottom: 2px solid #e5e7eb;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 200px;
+
+    .back-btn {
+      background: #f3f4f6;
+      color: #374151;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+
+      &:hover {
+        background: #e5e7eb;
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .logo-clickable {
+      height: 60px;
+      width: 60px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  .header-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+
+    h1 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #374151;
+      text-align: center;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 200px;
+    justify-content: flex-end;
+
+    .login-btn {
+      background: #6b7280;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+
+      &:hover {
+        background: #4b5563;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(107, 114, 128, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .signup-btn {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+
+      &:hover {
+        background: #059669;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .header-frontoffice {
+    padding: 10px 15px;
+
+    .header-left {
+      min-width: auto;
+      
+      .logo-clickable {
+        height: 50px;
+        width: 50px;
+      }
+    }
+
+    .header-center h1 {
+      font-size: 20px;
+    }
+
+    .header-right {
+      min-width: auto;
+      gap: 8px;
+
+      .login-btn,
+      .signup-btn {
+        padding: 8px 14px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .header-frontoffice {
+    .header-center h1 {
+      font-size: 18px;
+    }
+
+    .header-right {
+      .login-btn,
+      .signup-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+      }
+    }
+  }
+}
