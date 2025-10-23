@@ -22,7 +22,7 @@ import MenuLateralCarrinho from './components/menuLateralCarrinho/index.jsx';
 
 
 
-import FreteCalculator from './components/FreteCalculator.jsx';
+import LoginPage from './pages/frontoffice/LoginPage/index.jsx';
 
 
 
@@ -35,6 +35,7 @@ function App() {
             <Route path="/" element={<PaginaInicial/>}/>
             <Route path="/produtos-loja" element={<ListarProdutosFrontoffice/>}/>
             <Route path="/produto/:id" element={<DetalhesProdutoFrontoffice/>}/>
+            <Route path="/login" element={<LoginPage/>} />
             <Route path="/cadastro-cliente" element={<CadastroCliente/>}/>
             <Route path="/loginAdm" element={<LoginAdmPage/>} />
             <Route path="/admdashboard" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><AdminDashboard /></ProtectedRoute>} />
