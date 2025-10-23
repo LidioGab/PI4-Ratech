@@ -4,16 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.pi4.backend.api.controllers.LoginController.SessionDto;
+import com.pi4.backend.api.controllers.loginController.SessionDto;
+import com.pi4.backend.api.entities.Cliente;
 import com.pi4.backend.api.entities.Usuario;
+import com.pi4.backend.api.repositories.ClienteRepository;
 import com.pi4.backend.api.repositories.UserRepository;
-import java.util.Objects;
 
 @Service
 public class LoginService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -24,12 +28,24 @@ public class LoginService {
 
     public SessionDto autenticarUsuario(String email, String senha) {
 
+        // Primeiro tenta buscar na tabela de usuários (admins/estoquistas)
         Usuario usuario = userRepository.findByEmail(email);
-
-        if (usuario == null) {
-            throw new RuntimeException("Usuário ou senha inválidos");
+        
+        if (usuario != null) {
+            return autenticarUsuarioAdmin(usuario, senha);
         }
 
+        // Se não encontrou na tabela de usuários, busca na tabela de clientes
+        Cliente cliente = clienteRepository.findByEmail(email);
+        
+        if (cliente != null) {
+            return autenticarCliente(cliente, senha);
+        }
+
+        throw new RuntimeException("Usuário ou senha inválidos");
+    }
+
+    private SessionDto autenticarUsuarioAdmin(Usuario usuario, String senha) {
         if (usuario.getStatus() == null || !usuario.getStatus()) {
             throw new RuntimeException("Usuário inativo");
         }
@@ -39,13 +55,10 @@ public class LoginService {
             throw new RuntimeException("Usuário ou senha inválidos");
         }
 
-        String grupo = usuario.getGrupo() != null ? usuario.getGrupo().getNome() : GRUPO_CLIENTE;
-
-
+        String grupo = usuario.getGrupo() != null ? usuario.getGrupo().getNome() : "Usuario";
         boolean isBackoffice = isGrupoPermitido(grupo, GRUPOS_BACKOFFICE);
 
-        if (GRUPO_CLIENTE.equalsIgnoreCase(grupo) || isBackoffice) {
-
+        if (isBackoffice) {
             SessionDto session = new SessionDto();
             session.setId(usuario.getId());
             session.setNome(usuario.getNome());
@@ -54,6 +67,23 @@ public class LoginService {
         } else {
             throw new RuntimeException("Acesso negado. Grupo não reconhecido.");
         }
+    }
+
+    private SessionDto autenticarCliente(Cliente cliente, String senha) {
+        if (cliente.getStatus() == null || !cliente.getStatus()) {
+            throw new RuntimeException("Cliente inativo");
+        }
+
+        boolean passwordOk = passwordEncoder.matches(senha, cliente.getSenha());
+        if (!passwordOk) {
+            throw new RuntimeException("Usuário ou senha inválidos");
+        }
+
+        SessionDto session = new SessionDto();
+        session.setId(cliente.getId());
+        session.setNome(cliente.getNome());
+        session.setGrupo(GRUPO_CLIENTE);
+        return session;
     }
 
     private boolean isGrupoPermitido(String grupo, String[] gruposPermitidos) {

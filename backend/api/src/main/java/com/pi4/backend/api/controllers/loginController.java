@@ -12,9 +12,9 @@ import com.pi4.backend.api.services.LoginService; // Novo Serviço
 
 @RestController
 @CrossOrigin(origins = "*")
-public class LoginController {
+public class loginController {
 
-    private static final Logger log = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger log = LoggerFactory.getLogger(loginController.class);
 
     @Autowired
     private LoginService loginService; // Injeção do novo Service

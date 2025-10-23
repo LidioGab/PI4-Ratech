@@ -7,6 +7,7 @@ import com.pi4.backend.api.entities.Cliente;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
+    Cliente findByEmail(String email);
     boolean existsByEmail(String email);
     boolean existsByCpf(String cpf);
 }
