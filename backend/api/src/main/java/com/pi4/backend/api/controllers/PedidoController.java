@@ -3,6 +3,7 @@ package com.pi4.backend.api.controllers;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,6 +70,8 @@ public class PedidoController {
         private String enderecoEntregaCidade;
         private String enderecoEntregaUf;
         private String observacoes;
+    // Opcional: valor de frete escolhido pelo cliente (em centavos/valor decimal)
+    private java.math.BigDecimal valorFreteEscolhido;
         
         // Getters e Setters
         public Integer getClienteId() { return clienteId; }
@@ -90,6 +94,8 @@ public class PedidoController {
         public void setEnderecoEntregaUf(String enderecoEntregaUf) { this.enderecoEntregaUf = enderecoEntregaUf; }
         public String getObservacoes() { return observacoes; }
         public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
+        public java.math.BigDecimal getValorFreteEscolhido() { return valorFreteEscolhido; }
+        public void setValorFreteEscolhido(java.math.BigDecimal valorFreteEscolhido) { this.valorFreteEscolhido = valorFreteEscolhido; }
     }
     
     public static class ItemPedidoDto {
@@ -182,9 +188,37 @@ public class PedidoController {
                 produtoRepository.save(produto);
             }
             
-            // Calcular frete
-            var freteInfo = freteService.calcularFretePorCep(request.getCepEntrega());
-            BigDecimal valorFrete = BigDecimal.valueOf(freteInfo.get("padrao"));
+            // Calcular frete (usar valor escolhido pelo cliente se enviado, caso contrário usar serviço/fallback)
+            BigDecimal valorFrete = BigDecimal.ZERO;
+
+            if (request.getValorFreteEscolhido() != null) {
+                valorFrete = request.getValorFreteEscolhido();
+            } else {
+                var freteInfo = freteService.calcularFretePorCep(request.getCepEntrega());
+
+                if (freteInfo != null && freteInfo.get("padrao") != null) {
+                    Object padraoObj = freteInfo.get("padrao");
+                    if (padraoObj instanceof Number) {
+                        valorFrete = BigDecimal.valueOf(((Number) padraoObj).doubleValue());
+                    } else {
+                        try {
+                            valorFrete = new BigDecimal(padraoObj.toString());
+                        } catch (Exception e) {
+                            // Se conversão falhar, usar fallback
+                            System.out.println("Aviso: valor de frete inválido retornado pelo serviço de frete. Usando valor fictício.");
+                        }
+                    }
+                }
+
+                if (valorFrete.compareTo(BigDecimal.ZERO) == 0) {
+                    // Fallback: frete fictício = max( R$10.00, 10% do subtotal )
+                    BigDecimal percentual = subtotal.multiply(new BigDecimal("0.10"));
+                    BigDecimal minimo = new BigDecimal("10.00");
+                    BigDecimal calculado = percentual.setScale(2, RoundingMode.HALF_UP);
+                    valorFrete = calculado.compareTo(minimo) < 0 ? minimo : calculado;
+                    System.out.println("Aviso: serviço de frete indisponível ou sem valor. Aplicando frete fictício: R$ " + valorFrete);
+                }
+            }
             
             pedido.setSubtotal(subtotal);
             pedido.setValorFrete(valorFrete);

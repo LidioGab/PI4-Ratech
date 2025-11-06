@@ -1,6 +1,5 @@
 -- Criação de database (opcional se já especificado na URL) - manter para ambientes locais
-drop database if exists ratech;
-create database ratech;
+create database if not exists ratech;
 use ratech;
 
 create table if not exists tb_grupo (

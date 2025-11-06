@@ -17,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Table;
 
 @Entity
@@ -75,11 +76,12 @@ public class Pedido {
     
     @Column(name = "observacoes", columnDefinition = "TEXT")
     private String observacoes;
-    
+
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
     
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<ItemPedido> itens = new ArrayList<>();
     
     // Enum para status do pedido
@@ -244,7 +246,7 @@ public class Pedido {
     public void setObservacoes(String observacoes) {
         this.observacoes = observacoes;
     }
-    
+
     public LocalDateTime getDataAtualizacao() {
         return dataAtualizacao;
     }
