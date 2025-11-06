@@ -26,7 +26,7 @@ export default function ProductPage() {
   async function buscarProduto() {
     try {
       setLoading(true);
-      const response = await api.get(`/produtos/${id}`);
+      const response = await api.get(`/api/produtos/${id}`);
       setProduto(response.data);
       setError(null);
     } catch (err) {

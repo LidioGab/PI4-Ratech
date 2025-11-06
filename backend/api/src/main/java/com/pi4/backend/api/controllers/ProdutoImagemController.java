@@ -27,7 +27,7 @@ import com.pi4.backend.api.services.ImagemStorageService;
 import com.pi4.backend.api.services.ImagemStorageService.StoredImage;
 
 @RestController
-@RequestMapping("/produtos/{id:[0-9]+}/imagens")
+@RequestMapping("/api/produtos/{id:[0-9]+}/imagens")
 public class ProdutoImagemController {
 
     private static final Logger log = LoggerFactory.getLogger(ProdutoImagemController.class);

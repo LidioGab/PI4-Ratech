@@ -29,7 +29,7 @@ export default function EditarProduto(){
   async function carregar(){
     try{
       setLoading(true);
-      const resp = await api.get(`/produtos/${id}`);
+      const resp = await api.get(`/api/produtos/${id}`);
       const p = resp.data;
       if(p.imagens){
         p.imagens = [...p.imagens].sort((a,b)=> (b.imagemPrincipal===true) - (a.imagemPrincipal===true));
@@ -97,14 +97,14 @@ export default function EditarProduto(){
       } else if(isEstoquista){
         payload.quantidadeEstoque = parseInt(form.quantidadeEstoque);
       }
-      const resp = await api.put(`/produtos/${id}`, payload);
+      const resp = await api.put(`/api/produtos/${id}`, payload);
       if(isAdmin && novasImagens.length){
         setUploading(true);
         const formData = new FormData();
         novasImagens.forEach(n=> formData.append('files', n.file));
         if(principalUpload!=null) formData.append('principalIndex', principalUpload);
         try{
-          await api.post(`/produtos/${id}/imagens`, formData);
+          await api.post(`/api/produtos/${id}/imagens`, formData);
           setNovasImagens([]);
           setPrincipalUpload(null);
         }catch(imgErr){
@@ -124,7 +124,7 @@ export default function EditarProduto(){
 
   async function toggleStatus(){
     try{
-      await api.put(`/produtos/${id}/status`);
+      await api.put(`/api/produtos/${id}/status`);
       await carregar();
       setFeedback({type:'ok', msg:'Status atualizado'});
     }catch(e){
@@ -163,7 +163,7 @@ export default function EditarProduto(){
   async function definirPrincipal(imagemId){
     if(!isAdmin) return;
     try{
-      await api.put(`/produtos/${id}/imagens/${imagemId}/principal`);
+      await api.put(`/api/produtos/${id}/imagens/${imagemId}/principal`);
       await carregar();
       setFeedback({type:'ok', msg:'Imagem principal atualizada'});
     }catch(e){
@@ -174,7 +174,7 @@ export default function EditarProduto(){
   async function removerImagem(imagemId){
     if(!isAdmin) return;
     try{
-      await api.delete(`/produtos/${id}/imagens/${imagemId}`);
+      await api.delete(`/api/produtos/${id}/imagens/${imagemId}`);
       await carregar();
       setFeedback({type:'ok', msg:'Imagem removida'});
     }catch(e){

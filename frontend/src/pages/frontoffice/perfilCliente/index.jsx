@@ -64,7 +64,7 @@ export default function PerfilCliente() {
   async function carregarDadosCompletos(clienteId) {
     try {
       setLoading(true);
-      const response = await api.get(`/clientes/${clienteId}`);
+      const response = await api.get(`/api/clientes/${clienteId}`);
       const cliente = response.data;
       
       setDadosPessoais({
@@ -108,7 +108,7 @@ export default function PerfilCliente() {
 
     try {
       setLoading(true);
-      await api.put(`/clientes/${clienteLogado.id}`, dadosPessoais);
+      await api.put(`/api/clientes/${clienteLogado.id}`, dadosPessoais);
       
       // Atualizar sessão local
       const novaSessionData = { ...clienteLogado, nome: dadosPessoais.nome };
@@ -145,7 +145,7 @@ export default function PerfilCliente() {
 
     try {
       setLoading(true);
-      await api.put(`/clientes/${clienteLogado.id}/senha`, {
+      await api.put(`/api/clientes/${clienteLogado.id}/senha`, {
         senhaAtual: senhas.senhaAtual,
         novaSenha: senhas.novaSenha
       });
@@ -196,7 +196,10 @@ export default function PerfilCliente() {
 
     try {
       setLoading(true);
-      const response = await api.post(`/clientes/${clienteLogado.id}/enderecos`, novoEndereco);
+      const response = await api.post(`/api/clientes/${clienteLogado.id}/enderecos`, {
+        ...novoEndereco,
+        tipoEndereco: 'ENTREGA'
+      });
       
       setEnderecos(prev => [...prev, response.data]);
       setNovoEndereco({
@@ -225,7 +228,7 @@ export default function PerfilCliente() {
 
     try {
       setLoading(true);
-      await api.delete(`/clientes/${clienteLogado.id}/enderecos/${enderecoId}`);
+      await api.delete(`/api/clientes/${clienteLogado.id}/enderecos/${enderecoId}`);
       
       setEnderecos(prev => prev.filter(end => end.id !== enderecoId));
       mostrarMensagem('Endereço removido com sucesso!', 'sucesso');

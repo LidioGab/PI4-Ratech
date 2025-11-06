@@ -27,7 +27,7 @@ export default function ListarProdutos() {
       params.append('page', page);
   params.append('size', PAGE_SIZE);
       if (query) params.append('q', query);
-      const response = await api.get(`/produtos?${params.toString()}`);
+      const response = await api.get(`/api/produtos?${params.toString()}`);
       const data = response.data;
       setProdutos(data.content || []);
       setTotalPages(data.totalPages || 0);
@@ -42,7 +42,7 @@ export default function ListarProdutos() {
 
   async function toggleStatus(id) {
     try {
-      await api.put(`/produtos/${id}/status`);
+      await api.put(`/api/produtos/${id}/status`);
       setConfirmStatus({open:false, id:null, atual:false});
       buscarProdutos();
     } catch (e) {

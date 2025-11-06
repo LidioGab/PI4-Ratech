@@ -1,8 +1,9 @@
 import './LoginPage.css';
 import HeaderFrontoffice from "../../../components/headerFrontoffice/index.jsx";
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api.js';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -10,6 +11,17 @@ export default function LoginPage() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useAuth();
+
+  useEffect(() => {
+    // Se já estiver logado, redirecionar
+    const clienteSession = localStorage.getItem('clienteSession');
+    if (clienteSession) {
+      const redirectPath = localStorage.getItem('redirectAfterLogin') || '/';
+      localStorage.removeItem('redirectAfterLogin');
+      navigate(redirectPath);
+    }
+  }, [navigate]);
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -17,15 +29,23 @@ export default function LoginPage() {
     setLoading(true);
     
     try {
-      const response = await api.post('/login', { email, senha });
+      const response = await api.post('/api/login', { email, senha });
       const data = response.data;
 
       // Verificar se é um cliente
       if (data.grupo === 'Cliente') {
         // Salvar sessão do cliente
         localStorage.setItem('clienteSession', JSON.stringify(data));
-        alert('Login realizado com sucesso!');
-        navigate('/');
+        setUser(data);
+        
+        // Verificar se há redirecionamento pendente
+        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        if (redirectPath) {
+          localStorage.removeItem('redirectAfterLogin');
+          navigate(redirectPath);
+        } else {
+          navigate('/');
+        }
       } else {
         // Se não for cliente, não permitir login
         setError('Esta página é apenas para clientes. Use o login administrativo.');

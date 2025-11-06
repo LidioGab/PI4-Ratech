@@ -17,7 +17,7 @@ import com.pi4.backend.api.repositories.ProdutoRepository;
 import com.pi4.backend.api.repositories.UserRepository;
 
 @RestController
-@RequestMapping("/dashboard")
+@RequestMapping("/api/dashboard")
 @CrossOrigin(origins = "*")
 public class DashboardController {
 

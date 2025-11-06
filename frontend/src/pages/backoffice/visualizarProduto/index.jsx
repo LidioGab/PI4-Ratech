@@ -23,7 +23,7 @@ export default function VisualizarProduto(){
   async function buscar(){
     try{
       setLoading(true);
-      const resp = await api.get(`/produtos/${id}`);
+      const resp = await api.get(`/api/produtos/${id}`);
       const p = resp.data;
       setProduto(p);
       if(p.imagens && p.imagens.length>0){

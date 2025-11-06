@@ -64,7 +64,7 @@ export default function ListarProdutosFrontoffice() {
       }
 
       console.log('Buscando produtos com parâmetros:', params.toString());
-      const response = await api.get(`/produtos?${params.toString()}`);
+      const response = await api.get(`/api/produtos?${params.toString()}`);
       const data = response.data;
       
       console.log('Resposta da API:', data);
@@ -80,7 +80,7 @@ export default function ListarProdutosFrontoffice() {
       }
     } catch (err) {
       console.error('Erro ao buscar produtos:', err);
-      setError('Erro ao carregar produtos. Tente novamente.');
+      setError('Erro ao carregar produtos. Verifique se o servidor backend está rodando.');
       setProdutos([]);
     } finally {
       setLoading(false);

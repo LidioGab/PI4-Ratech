@@ -1,0 +1,332 @@
+.checkout-resumo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.checkout-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.checkout-header h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.checkout-steps {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+}
+
+.step {
+    padding: 10px 20px;
+    background: #e0e0e0;
+    border-radius: 25px;
+    color: #666;
+    font-weight: 500;
+}
+
+.step.active {
+    background: #007bff;
+    color: white;
+}
+
+.checkout-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.checkout-main {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.resumo-section h2 {
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.3em;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+.dados-cliente,
+.endereco-entrega,
+.itens-pedido,
+.forma-pagamento {
+    margin-bottom: 30px;
+}
+
+.dados-cliente h3,
+.endereco-entrega h3,
+.itens-pedido h3,
+.forma-pagamento h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.cliente-info p,
+.endereco-info p,
+.pagamento-info p {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.endereco-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #007bff;
+}
+
+.itens-lista {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.item-pedido {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.item-pedido:last-child {
+    border-bottom: none;
+}
+
+.item-imagem {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+.item-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.placeholder-imagem {
+    width: 100%;
+    height: 100%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    color: #999;
+    font-size: 0.8em;
+}
+
+.item-detalhes {
+    flex: 1;
+}
+
+.item-detalhes h4 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 1em;
+}
+
+.item-detalhes p {
+    margin: 0 0 4px 0;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.item-total {
+    color: #333;
+    font-weight: 600;
+}
+
+.pagamento-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.pagamento-boleto p:first-child,
+.pagamento-cartao p:first-child {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.checkout-sidebar {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.total-pedido h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+}
+
+.valores-resumo {
+    margin-bottom: 20px;
+}
+
+.valor-linha {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 8px 0;
+}
+
+.valor-linha.desconto {
+    color: #28a745;
+}
+
+.valor-linha.juros {
+    color: #dc3545;
+}
+
+.valor-linha.total-final {
+    border-top: 2px solid #eee;
+    padding-top: 15px;
+    margin-top: 15px;
+    font-size: 1.1em;
+}
+
+.termos-condicoes {
+    margin-bottom: 20px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin: 0;
+}
+
+.checkbox-container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.checkbox-container a:hover {
+    text-decoration: underline;
+}
+
+.checkout-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-voltar {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn-voltar:hover:not(:disabled) {
+    background: #5a6268;
+}
+
+.btn-finalizar {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    min-width: 140px;
+}
+
+.btn-finalizar:hover:not(:disabled) {
+    background: #218838;
+}
+
+.btn-voltar:disabled,
+.btn-finalizar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+}
+
+.checkout-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 1.2em;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .checkout-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .checkout-steps {
+        gap: 20px;
+    }
+    
+    .step {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+    
+    .item-pedido {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .item-imagem {
+        align-self: center;
+    }
+    
+    .checkout-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-voltar,
+    .btn-finalizar {
+        width: 100%;
+    }
+    
+    .checkout-sidebar {
+        position: static;
+    }
+}

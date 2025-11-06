@@ -48,7 +48,7 @@ export default function CriarUsuario() {
         confirmacaoSenha: formData.confirmacaoSenha,
         grupo: formData.grupo
       };
-      await api.post('/usuarios', payload);
+      await api.post('/api/usuarios', payload);
       alert('Usuário criado com sucesso');
       navigate('/usuarios');
     } catch (error) {

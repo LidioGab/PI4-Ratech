@@ -10,9 +10,14 @@ export default function PaginaInicial(){
   let [produtos, setProdutos] = useState([]);
 
   async function buscarProdutos() {
-    const response = await api.get("/produtos/todos")
-    console.log(response.data)
-    setProdutos(response.data)
+    try {
+      const response = await api.get("/api/produtos/todos")
+      console.log(response.data)
+      setProdutos(response.data)
+    } catch (error) {
+      console.error('Erro ao buscar produtos:', error)
+      console.log('Verifique se o servidor backend está rodando em http://localhost:8080')
+    }
   }
 
   const melhoresAvaliados = [...produtos]

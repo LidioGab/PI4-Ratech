@@ -71,7 +71,7 @@ export default function CadastroProduto() {
         quantidadeEstoque: qtd
       };
 
-      const produtoResp = await api.post('/produtos', payload);
+      const produtoResp = await api.post('/api/produtos', payload);
       const produtoId = produtoResp.data.id;
 
       if (formData.imagens.length > 0) {
@@ -82,7 +82,7 @@ export default function CadastroProduto() {
         }
         try {
           console.log('Enviando imagens produto', produtoId, formData.imagens.length);
-          await api.post(`/produtos/${produtoId}/imagens`, form);
+          await api.post(`/api/produtos/${produtoId}/imagens`, form);
         } catch (errUpload) {
           console.error('Falha upload imagens', errUpload);
           alert('Produto criado, mas houve erro ao enviar imagens. Você pode tentar editar e reenviar.');

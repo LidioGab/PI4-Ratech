@@ -1,0 +1,397 @@
+.checkout-pagamento-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.checkout-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.checkout-header h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.checkout-steps {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+}
+
+.step {
+    padding: 10px 20px;
+    background: #e0e0e0;
+    border-radius: 25px;
+    color: #666;
+    font-weight: 500;
+}
+
+.step.active {
+    background: #007bff;
+    color: white;
+}
+
+.checkout-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.checkout-main {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.pagamento-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+}
+
+.formas-pagamento {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.forma-pagamento-opcao {
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.forma-pagamento-opcao:hover {
+    border-color: #007bff;
+    background: #f8f9fa;
+}
+
+.radio-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    cursor: pointer;
+}
+
+.radio-container input[type="radio"] {
+    margin-top: 2px;
+}
+
+.checkmark {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 50%;
+    margin-top: 2px;
+}
+
+.radio-container input:checked ~ .checkmark {
+    background-color: #007bff;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.radio-container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.radio-container .checkmark:after {
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+.opcao-content {
+    flex: 1;
+}
+
+.opcao-content h3 {
+    color: #333;
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+}
+
+.opcao-content p {
+    color: #666;
+    margin: 0 0 10px 0;
+}
+
+.opcao-valor {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.valor-original {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.valor-desconto {
+    color: #28a745;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.dados-cartao {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.dados-cartao h3 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    flex: 1;
+}
+
+.form-group.flex-1 { flex: 1; }
+.form-group.flex-2 { flex: 2; }
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.error-text {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 5px;
+}
+
+.checkout-sidebar {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.resumo-pedido h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.itens-resumo {
+    margin-bottom: 15px;
+}
+
+.item-resumo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.item-resumo:last-child {
+    border-bottom: none;
+}
+
+.item-nome {
+    flex: 1;
+    color: #333;
+}
+
+.item-valor {
+    font-weight: 500;
+    color: #333;
+}
+
+.total-resumo {
+    padding-top: 15px;
+    border-top: 2px solid #eee;
+}
+
+.total-resumo > div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.total-resumo .subtotal {
+    color: #666;
+}
+
+.total-resumo .desconto {
+    color: #28a745;
+}
+
+.total-resumo .total-final {
+    font-size: 1.1em;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+    margin-top: 8px;
+}
+
+.checkout-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-voltar {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn-voltar:hover {
+    background: #5a6268;
+}
+
+.btn-continuar {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn-continuar:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.btn-continuar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.checkout-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 1.2em;
+    color: #666;
+}
+
+/* Estilos específicos para cartões de crédito */
+.form-group input[placeholder*="1234"] {
+    letter-spacing: 2px;
+    font-family: monospace;
+}
+
+.form-group input[placeholder*="CVV"] {
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.form-group input[placeholder*="MM/AA"] {
+    text-align: center;
+    font-family: monospace;
+}
+
+/* Animações */
+.forma-pagamento-opcao {
+    transition: all 0.3s ease;
+}
+
+.dados-cartao {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .checkout-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .checkout-steps {
+        gap: 20px;
+    }
+    
+    .step {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .checkout-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-voltar,
+    .btn-continuar {
+        width: 100%;
+    }
+    
+    .radio-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .opcao-valor {
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+    }
+}

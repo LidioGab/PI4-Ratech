@@ -51,13 +51,13 @@ export default function admpage(){
     try {
       setStats(prev => ({ ...prev, loading: true }));
       
-      const statsResp = await api.get('/dashboard/estatisticas');
+      const statsResp = await api.get('/api/dashboard/estatisticas');
       const statsData = statsResp.data;
       
       let produtosCriticos = [];
       if (statsData.baixoEstoque > 0) {
         try {
-          const criticosResp = await api.get('/dashboard/produtos-criticos');
+          const criticosResp = await api.get('/api/dashboard/produtos-criticos');
           produtosCriticos = criticosResp.data.slice(0, 5);
         } catch (e) {
           console.warn('Erro ao buscar produtos críticos:', e);

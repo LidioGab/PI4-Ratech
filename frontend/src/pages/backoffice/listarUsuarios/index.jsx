@@ -17,7 +17,7 @@ export default function ListarUsuarios() {
   async function buscarUsuarios() {
     try {
       setLoading(true);
-  const response = await api.get('/usuarios');
+  const response = await api.get('/api/usuarios');
   setUsuarios(response.data || []);
       console.log(response.data)
       setError(null);
@@ -31,7 +31,7 @@ export default function ListarUsuarios() {
 
   async function toggleStatus(id) {
     try {
-      await api.put(`/usuarios/${id}/status`);
+      await api.put(`/api/usuarios/${id}/status`);
       setConfirmStatus({open:false,id:null,atual:false});
       buscarUsuarios();
     } catch (e) {
@@ -49,7 +49,7 @@ export default function ListarUsuarios() {
     const confirmacao = prompt('Confirme a nova senha:');
     if (novaSenha !== confirmacao) { alert('Senhas não conferem'); return; }
     try {
-      await api.put(`/usuarios/${id}/senha`, { novaSenha, confirmacao });
+      await api.put(`/api/usuarios/${id}/senha`, { novaSenha, confirmacao });
       alert('Senha alterada');
     } catch (e) { alert('Erro ao alterar senha'); }
   }

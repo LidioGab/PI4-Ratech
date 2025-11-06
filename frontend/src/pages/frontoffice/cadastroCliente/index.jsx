@@ -1,9 +1,10 @@
 import './index.css';
 import HeaderFrontoffice from "../../../components/headerFrontoffice/index.jsx";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { formatarCPF, validarCPF } from '../../../utils/cpf.js';
 import api from '../../../services/api.js';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function CadastroCliente() {
   const [formData, setFormData] = useState({
@@ -38,6 +39,7 @@ export default function CadastroCliente() {
   const [loading, setLoading] = useState(false);
   const [copiarEndereco, setCopiarEndereco] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const buscarCep = async (cep, isEntrega = false, index = 0) => {
     const cepLimpo = cep.replace(/\D/g, '');
@@ -288,10 +290,47 @@ export default function CadastroCliente() {
     setLoading(true);
     
     try {
-      const response = await api.post('/clientes/cadastro', formData);
+      // Preparar dados para envio
+      const dadosEnvio = {
+        ...formData,
+        enderecosEntrega: copiarEndereco ? [] : formData.enderecosEntrega
+      };
+      
+      const response = await api.post('/api/clientes/cadastro', dadosEnvio);
 
-      alert('Cadastro realizado com sucesso!');
-      navigate('/');
+      // Após cadastro bem-sucedido, fazer login automático
+      try {
+        const loginResponse = await api.post('/api/login', {
+          email: formData.email,
+          senha: formData.senha
+        });
+
+        const userData = loginResponse.data;
+        localStorage.setItem('clienteSession', JSON.stringify(userData));
+        setUser(userData);
+
+        alert('Cadastro realizado com sucesso!');
+
+        // Verificar se há redirecionamento pendente
+        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        if (redirectPath) {
+          localStorage.removeItem('redirectAfterLogin');
+          navigate(redirectPath);
+        } else {
+          navigate('/');
+        }
+
+      } catch (loginError) {
+        // Se falhar o login automático, redirecionar para login manual
+        alert('Cadastro realizado com sucesso! Faça login para continuar.');
+        const redirectPath = localStorage.getItem('redirectAfterLogin');
+        if (redirectPath) {
+          navigate('/login');
+        } else {
+          navigate('/');
+        }
+      }
+
     } catch (error) {
       const errorMessage = error.response?.data || 'Erro ao conectar com o servidor';
       setErrors({ submit: errorMessage });
@@ -427,7 +466,11 @@ export default function CadastroCliente() {
                   id="faturamento_cep"
                   placeholder="00000-000"
                   value={formData.enderecoFaturamento.cep} 
-                  onChange={e => handleInputChange('endereco_cep', e.target.value)}
+                  onChange={e => {
+                    const valor = e.target.value.replace(/\D/g, '').slice(0, 8);
+                    const valorFormatado = valor.length > 5 ? `${valor.slice(0, 5)}-${valor.slice(5)}` : valor;
+                    handleInputChange('endereco_cep', valorFormatado);
+                  }}
                   onBlur={e => buscarCep(e.target.value)}
                   className={errors.faturamento_cep ? 'error' : ''}
                   maxLength="9"
@@ -559,7 +602,11 @@ export default function CadastroCliente() {
                       type="text" 
                       placeholder="00000-000"
                       value={endereco.cep} 
-                      onChange={e => handleInputChange('cep', e.target.value, true, index)}
+                      onChange={e => {
+                        const valor = e.target.value.replace(/\D/g, '').slice(0, 8);
+                        const valorFormatado = valor.length > 5 ? `${valor.slice(0, 5)}-${valor.slice(5)}` : valor;
+                        handleInputChange('cep', valorFormatado, true, index);
+                      }}
                       onBlur={e => buscarCep(e.target.value, true, index)}
                       className={errors[`entrega_${index}_cep`] ? 'error' : ''}
                       maxLength="9"

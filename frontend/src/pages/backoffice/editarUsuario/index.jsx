@@ -27,7 +27,7 @@ export default function EditarUsuario() {
   async function buscarUsuario() {
     try {
       setLoadingUser(true);
-      const { data } = await api.get(`/usuarios/${id}`);
+      const { data } = await api.get(`/api/usuarios/${id}`);
       setFormData({
         nome: data.nome || '',
         email: data.email || '',
@@ -63,7 +63,7 @@ export default function EditarUsuario() {
     try {
   if (!validate()) return;
   const payload = { nome: formData.nome, cpf: formData.cpf, grupo: formData.grupo };
-  await api.put(`/usuarios/${id}`, payload);
+  await api.put(`/api/usuarios/${id}`, payload);
   alert('Usuário atualizado');
   navigate('/usuarios');
     } catch (error) {
@@ -165,7 +165,7 @@ export default function EditarUsuario() {
                   <button onClick={()=>setSenhaModal({open:false, novaSenha:'', confirmacao:''})}>Cancelar</button>
                   <button onClick={async ()=>{
                     if (!senhaModal.novaSenha || senhaModal.novaSenha !== senhaModal.confirmacao){alert('Senhas não conferem'); return;}
-                    try { await api.put(`/usuarios/${id}/senha`, { novaSenha: senhaModal.novaSenha, confirmacao: senhaModal.confirmacao }); alert('Senha alterada'); setSenhaModal({open:false,novaSenha:'',confirmacao:''}); } catch { alert('Erro ao alterar senha'); }
+                    try { await api.put(`/api/usuarios/${id}/senha`, { novaSenha: senhaModal.novaSenha, confirmacao: senhaModal.confirmacao }); alert('Senha alterada'); setSenhaModal({open:false,novaSenha:'',confirmacao:''}); } catch { alert('Erro ao alterar senha'); }
                   }}>Salvar</button>
                 </div>
               </div>

@@ -1,0 +1,351 @@
+.checkout-endereco-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.checkout-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.checkout-header h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.checkout-steps {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 20px;
+}
+
+.step {
+    padding: 10px 20px;
+    background: #e0e0e0;
+    border-radius: 25px;
+    color: #666;
+    font-weight: 500;
+}
+
+.step.active {
+    background: #007bff;
+    color: white;
+}
+
+.checkout-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.checkout-main {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.endereco-section h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+}
+
+.no-enderecos {
+    text-align: center;
+    padding: 40px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.no-enderecos p {
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.btn-adicionar-endereco {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn-adicionar-endereco:hover {
+    background: #218838;
+}
+
+.enderecos-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.endereco-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.endereco-card:hover {
+    border-color: #007bff;
+    background: #f8f9fa;
+}
+
+.endereco-card.selecionado {
+    border-color: #007bff;
+    background: #e3f2fd;
+}
+
+.endereco-card input[type="radio"] {
+    margin-top: 2px;
+}
+
+.endereco-info {
+    flex: 1;
+}
+
+.endereco-linha1 {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.endereco-complemento {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 4px;
+}
+
+.endereco-linha2 {
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.endereco-cep {
+    color: #888;
+    font-size: 0.9em;
+}
+
+.btn-adicionar-endereco-secundario {
+    background: none;
+    border: 2px dashed #007bff;
+    color: #007bff;
+    padding: 15px;
+    width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn-adicionar-endereco-secundario:hover {
+    background: #e3f2fd;
+}
+
+.formulario-endereco {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.formulario-endereco h3 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    flex: 1;
+}
+
+.form-group.flex-1 { flex: 1; }
+.form-group.flex-2 { flex: 2; }
+.form-group.flex-3 { flex: 3; }
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.form-actions button[type="button"] {
+    background: #6c757d;
+    color: white;
+}
+
+.form-actions button[type="submit"] {
+    background: #007bff;
+    color: white;
+}
+
+.checkout-sidebar {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    height: fit-content;
+}
+
+.resumo-pedido h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.itens-resumo {
+    margin-bottom: 15px;
+}
+
+.item-resumo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.item-resumo:last-child {
+    border-bottom: none;
+}
+
+.total-resumo {
+    padding-top: 15px;
+    border-top: 2px solid #eee;
+    font-size: 1.1em;
+}
+
+.checkout-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-voltar {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn-voltar:hover {
+    background: #5a6268;
+}
+
+.btn-continuar {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.btn-continuar:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.btn-continuar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border: 1px solid #f5c6cb;
+}
+
+.checkout-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 1.2em;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .checkout-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .checkout-steps {
+        gap: 20px;
+    }
+    
+    .step {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .checkout-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-voltar,
+    .btn-continuar {
+        width: 100%;
+    }
+}

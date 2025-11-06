@@ -56,6 +56,10 @@ public class Cliente {
     @JsonManagedReference
     private List<EnderecoCliente> enderecos;
 
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Endereco> enderecosNovos;
+
     public enum Genero {
         MASCULINO, FEMININO, OUTRO, PREFIRO_NAO_INFORMAR
     }
@@ -90,4 +94,7 @@ public class Cliente {
 
     public List<EnderecoCliente> getEnderecos() { return enderecos; }
     public void setEnderecos(List<EnderecoCliente> enderecos) { this.enderecos = enderecos; }
+
+    public List<Endereco> getEnderecosNovos() { return enderecosNovos; }
+    public void setEnderecosNovos(List<Endereco> enderecosNovos) { this.enderecosNovos = enderecosNovos; }
 }

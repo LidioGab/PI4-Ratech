@@ -128,6 +128,10 @@ export default function HeaderPesquisa(){
                       <span>👤</span>
                       Alterar Dados do Cliente
                     </Link>
+                    <Link to="/meus-pedidos" className='menu-option' onClick={() => setMenuLateralAberto(false)}>
+                      <span>📋</span>
+                      Meus Pedidos
+                    </Link>
                     <button className='menu-option logout-option' onClick={handleLogout}>
                       <span>🚪</span>
                       Sair

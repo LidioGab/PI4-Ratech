@@ -4,6 +4,9 @@ import { formatCurrency } from '../../utils/cart';
 import FreteCalculator from '../FreteCalculator';
 import api from '../../services/api';
 import placeholder from '../../assets/images/product-placeholder.svg';
+import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 export default function MenuLateralCarrinho() {
   const { 
@@ -18,6 +21,9 @@ export default function MenuLateralCarrinho() {
     getTotalItems,
     clearCart 
   } = useCart();
+  
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   function buildImageSrc(img) {
     if (!img) return placeholder;
@@ -43,6 +49,33 @@ export default function MenuLateralCarrinho() {
   function handleClearCart() {
     if (window.confirm('Deseja realmente limpar todo o carrinho?')) {
       clearCart();
+    }
+  }
+
+  function handleCheckout() {
+    // Verificar se usuário está logado - IGUAL ao perfil cliente
+    const cliente = localStorage.getItem('clienteSession');
+    if (!cliente) {
+      // Salvar rota de retorno e redirecionar para login
+      localStorage.setItem('redirectAfterLogin', '/checkout');
+      closeCart();
+      navigate('/login');
+    } else {
+      try {
+        const clienteData = JSON.parse(cliente);
+        if (!clienteData || !clienteData.id) {
+          closeCart();
+          navigate('/login');
+          return;
+        }
+        // Usuário logado, ir direto para checkout
+        closeCart();
+        navigate('/checkout');
+      } catch (error) {
+        console.error('Erro ao parsear sessão do cliente:', error);
+        closeCart();
+        navigate('/login');
+      }
     }
   }
 
@@ -149,7 +182,10 @@ export default function MenuLateralCarrinho() {
                   >
                     Limpar Carrinho
                   </button>
-                  <button className="checkout-btn">
+                  <button 
+                    className="checkout-btn"
+                    onClick={handleCheckout}
+                  >
                     Finalizar Compra
                   </button>
                 </div>

@@ -18,12 +18,15 @@ import ListarProdutosFrontoffice from './pages/frontoffice/listarProdutos/index.
 import DetalhesProdutoFrontoffice from './pages/frontoffice/detalhesProduto/index.jsx';
 import CadastroCliente from './pages/frontoffice/cadastroCliente/index.jsx';
 import PerfilCliente from './pages/frontoffice/perfilCliente/index.jsx';
+import PedidosCliente from './pages/frontoffice/pedidosCliente/index.jsx';
 
 import MenuLateralCarrinho from './components/menuLateralCarrinho/index.jsx';
-
-
-
 import LoginPage from './pages/frontoffice/LoginPage/LoginPage.jsx';
+import Checkout from './pages/frontoffice/checkout/index.jsx';
+import CheckoutEndereco from './pages/frontoffice/checkout/CheckoutEndereco.jsx';
+import CheckoutPagamento from './pages/frontoffice/checkout/CheckoutPagamento.jsx';
+import CheckoutResumo from './pages/frontoffice/checkout/CheckoutResumo.jsx';
+import CheckoutSucesso from './pages/frontoffice/checkout/CheckoutSucesso.jsx';
 
 
 
@@ -39,6 +42,12 @@ function App() {
             <Route path="/login" element={<LoginPage/>} />
             <Route path="/cadastro-cliente" element={<CadastroCliente/>}/>
             <Route path="/perfil-cliente" element={<PerfilCliente/>}/>
+            <Route path="/meus-pedidos" element={<PedidosCliente/>}/>
+            <Route path="/checkout" element={<Checkout/>}/>
+            <Route path="/checkout/endereco" element={<CheckoutEndereco/>}/>
+            <Route path="/checkout/pagamento" element={<CheckoutPagamento/>}/>
+            <Route path="/checkout/resumo" element={<CheckoutResumo/>}/>
+            <Route path="/checkout/sucesso/:pedidoId" element={<CheckoutSucesso/>}/>
             <Route path="/loginAdm" element={<LoginAdmPage/>} />
             <Route path="/admdashboard" element={<ProtectedRoute allowedGroups={["Administrador","Estoquista"]}><AdminDashboard /></ProtectedRoute>} />
             <Route path="/usuarios" element={<ProtectedRoute allowedGroups={["Administrador"]}><ListarUsuarios /></ProtectedRoute>} />

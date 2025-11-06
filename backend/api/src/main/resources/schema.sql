@@ -67,6 +67,21 @@ create table if not exists tb_endereco_cliente (
     foreign key (id_cliente) references tb_cliente(id_cliente)
 );
 
+-- Nova tabela para endereços (sistema novo)
+create table if not exists enderecos (
+    id bigint primary key auto_increment,
+    logradouro varchar(255) not null,
+    numero varchar(10) not null,
+    complemento varchar(100),
+    bairro varchar(100) not null,
+    cidade varchar(100) not null,
+    estado varchar(2) not null,
+    cep varchar(9) not null,
+    cliente_id int not null,
+    principal boolean not null default false,
+    foreign key (cliente_id) references tb_cliente(id_cliente) on delete cascade
+);
+
 -- Inserts idempotentes para grupos
 insert into tb_grupo (nome)
 select * from (select 'Administrador' as nome) tmp
@@ -118,3 +133,57 @@ insert into tb_produto (nome, avaliacao, descricao, preco, qtd_estoque, status) 
 ('Mousepad Gamer Artisan Ninja FX Zero XSoft XL', 4.8, 'Mousepad premium japonês equilíbrio controle x velocidade', 549.90, 15, true),
 ('Controle Elite Xbox Series 2', 4.7, 'Paddles traseiros, ajustes de tensão de sticks, estojo carregador', 1299.00, 8, true),
 ('Hub USB-C Thunderbolt 4 Gamer Base', 4.5, 'Expansão para setup multi-monitor e periféricos de baixa latência', 899.00, 5, true);
+
+-- Tabela para carrinho de compras persistente
+create table if not exists tb_carrinho_item (
+    id_carrinho_item int primary key auto_increment,
+    id_cliente int not null,
+    id_produto int not null,
+    quantidade int not null check (quantidade > 0),
+    data_adicao timestamp default current_timestamp,
+    data_atualizacao timestamp default current_timestamp on update current_timestamp,
+    foreign key (id_cliente) references tb_cliente(id_cliente) on delete cascade,
+    foreign key (id_produto) references tb_produto(id_produto) on delete cascade,
+    unique key unique_cliente_produto (id_cliente, id_produto)
+);
+
+-- Tabela para pedidos
+create table if not exists tb_pedido (
+    id_pedido bigint primary key auto_increment,
+    id_cliente int not null,
+    numero_pedido varchar(50) not null unique,
+    data_pedido timestamp default current_timestamp,
+    status enum('PENDENTE', 'CONFIRMADO', 'PROCESSANDO', 'ENVIADO', 'ENTREGUE', 'CANCELADO') not null default 'PENDENTE',
+    subtotal decimal(10,2) not null,
+    valor_frete decimal(10,2) not null,
+    valor_total decimal(10,2) not null,
+    endereco_entrega_cep varchar(9) not null,
+    endereco_entrega_logradouro varchar(255) not null,
+    endereco_entrega_numero varchar(20) not null,
+    endereco_entrega_complemento varchar(100),
+    endereco_entrega_bairro varchar(100) not null,
+    endereco_entrega_cidade varchar(100) not null,
+    endereco_entrega_uf varchar(2) not null,
+    observacoes text,
+    data_atualizacao timestamp default current_timestamp on update current_timestamp,
+    foreign key (id_cliente) references tb_cliente(id_cliente),
+    index idx_cliente_data (id_cliente, data_pedido),
+    index idx_status (status),
+    index idx_numero_pedido (numero_pedido)
+);
+
+-- Tabela para itens dos pedidos
+create table if not exists tb_item_pedido (
+    id_item_pedido bigint primary key auto_increment,
+    id_pedido bigint not null,
+    id_produto int not null,
+    quantidade int not null check (quantidade > 0),
+    preco_unitario decimal(10,2) not null,
+    subtotal decimal(10,2) not null,
+    nome_produto varchar(200) not null,
+    descricao_produto text,
+    foreign key (id_pedido) references tb_pedido(id_pedido) on delete cascade,
+    foreign key (id_produto) references tb_produto(id_produto),
+    index idx_pedido (id_pedido),
+    index idx_produto (id_produto)
+);

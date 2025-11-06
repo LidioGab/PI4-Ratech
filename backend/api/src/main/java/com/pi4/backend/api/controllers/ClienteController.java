@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,8 @@ import com.pi4.backend.api.entities.Cliente;
 import com.pi4.backend.api.entities.EnderecoCliente;
 import com.pi4.backend.api.repositories.ClienteRepository;
 import com.pi4.backend.api.repositories.EnderecoClienteRepository;
-
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/api/clientes")
 public class ClienteController {
 
     @Autowired
@@ -130,10 +128,12 @@ public class ClienteController {
                 return ResponseEntity.badRequest().body("Endereço de faturamento inválido");
             }
 
-            // Validar endereços de entrega
-            for (EnderecoDto endereco : dto.getEnderecosEntrega()) {
-                if (!validarEndereco(endereco)) {
-                    return ResponseEntity.badRequest().body("Um dos endereços de entrega é inválido");
+            // Validar endereços de entrega (se houver)
+            if (dto.getEnderecosEntrega() != null && !dto.getEnderecosEntrega().isEmpty()) {
+                for (EnderecoDto endereco : dto.getEnderecosEntrega()) {
+                    if (!validarEndereco(endereco)) {
+                        return ResponseEntity.badRequest().body("Um dos endereços de entrega é inválido");
+                    }
                 }
             }
 
@@ -155,10 +155,12 @@ public class ClienteController {
             EnderecoCliente enderecoFat = criarEndereco(dto.getEnderecoFaturamento(), cliente, EnderecoCliente.TipoEndereco.FATURAMENTO);
             enderecos.add(enderecoFat);
 
-            // Adicionar endereços de entrega
-            for (EnderecoDto enderecoDto : dto.getEnderecosEntrega()) {
-                EnderecoCliente enderecoEnt = criarEndereco(enderecoDto, cliente, EnderecoCliente.TipoEndereco.ENTREGA);
-                enderecos.add(enderecoEnt);
+            // Adicionar endereços de entrega (se houver)
+            if (dto.getEnderecosEntrega() != null && !dto.getEnderecosEntrega().isEmpty()) {
+                for (EnderecoDto enderecoDto : dto.getEnderecosEntrega()) {
+                    EnderecoCliente enderecoEnt = criarEndereco(enderecoDto, cliente, EnderecoCliente.TipoEndereco.ENTREGA);
+                    enderecos.add(enderecoEnt);
+                }
             }
 
             cliente.setEnderecos(enderecos);
@@ -461,7 +463,7 @@ public class ClienteController {
 
     private boolean validarNovoEndereco(NovoEnderecoDto endereco) {
         return endereco != null &&
-               endereco.getCep() != null && endereco.getCep().length() == 8 &&
+               isValidCep(endereco.getCep()) &&
                endereco.getLogradouro() != null && !endereco.getLogradouro().trim().isEmpty() &&
                endereco.getNumero() != null && !endereco.getNumero().trim().isEmpty() &&
                endereco.getBairro() != null && !endereco.getBairro().trim().isEmpty() &&

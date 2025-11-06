@@ -1,0 +1,292 @@
+.checkout-sucesso-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 20px;
+}
+
+.sucesso-content {
+    max-width: 600px;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    text-align: center;
+}
+
+.sucesso-icon {
+    margin-bottom: 30px;
+}
+
+.check-circle {
+    width: 80px;
+    height: 80px;
+    background: #28a745;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    color: white;
+}
+
+.check-circle svg {
+    width: 40px;
+    height: 40px;
+}
+
+.sucesso-header h1 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.8em;
+    font-weight: 600;
+}
+
+.sucesso-header p {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    line-height: 1.5;
+}
+
+.pedido-info {
+    margin-bottom: 30px;
+}
+
+.info-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: left;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #333;
+}
+
+.info-value {
+    font-weight: 600;
+    color: #333;
+}
+
+.pedido-numero {
+    color: #007bff;
+    font-size: 1.1em;
+}
+
+.status-badge {
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.valor-total {
+    color: #28a745;
+    font-size: 1.1em;
+}
+
+.pagamento-info-sucesso {
+    margin-bottom: 30px;
+}
+
+.pagamento-info-sucesso h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    text-align: left;
+}
+
+.pagamento-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: left;
+    border-left: 4px solid #007bff;
+}
+
+.pagamento-card p {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.pagamento-card strong {
+    color: #333;
+}
+
+.boleto-instrucao {
+    background: #e3f2fd;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 15px;
+    color: #1565c0;
+    font-size: 0.9em;
+}
+
+.proximos-passos {
+    margin-bottom: 30px;
+}
+
+.proximos-passos h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    text-align: left;
+}
+
+.passos-lista {
+    text-align: left;
+}
+
+.passo-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.passo-item:last-child {
+    margin-bottom: 0;
+}
+
+.passo-numero {
+    width: 30px;
+    height: 30px;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.9em;
+    flex-shrink: 0;
+}
+
+.passo-texto {
+    flex: 1;
+}
+
+.passo-texto strong {
+    display: block;
+    color: #333;
+    margin-bottom: 4px;
+    font-size: 1em;
+}
+
+.passo-texto p {
+    color: #666;
+    margin: 0;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.sucesso-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-primario,
+.btn-secundario {
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    min-width: 160px;
+}
+
+.btn-primario {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primario:hover {
+    background: #0056b3;
+}
+
+.btn-secundario {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secundario:hover {
+    background: #5a6268;
+}
+
+.checkout-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.2em;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .checkout-sucesso-container {
+        padding: 10px;
+    }
+    
+    .sucesso-content {
+        padding: 30px 20px;
+    }
+    
+    .sucesso-header h1 {
+        font-size: 1.5em;
+    }
+    
+    .sucesso-header p {
+        font-size: 1em;
+    }
+    
+    .check-circle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .check-circle svg {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .sucesso-actions {
+        flex-direction: column;
+    }
+    
+    .btn-primario,
+    .btn-secundario {
+        width: 100%;
+        min-width: auto;
+    }
+}

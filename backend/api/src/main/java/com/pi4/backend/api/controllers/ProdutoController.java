@@ -23,7 +23,7 @@ import com.pi4.backend.api.entities.Produto;
 import com.pi4.backend.api.repositories.ProdutoRepository;
 
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/api/produtos")
 public class ProdutoController {
 
     private final ProdutoRepository repository;
