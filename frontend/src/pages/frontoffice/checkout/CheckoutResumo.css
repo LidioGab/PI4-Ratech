@@ -262,6 +262,8 @@
     cursor: pointer;
     font-size: 1em;
     min-width: 140px;
+    margin: 0;
+    max-width: 200px;
 }
 
 .btn-finalizar:hover:not(:disabled) {

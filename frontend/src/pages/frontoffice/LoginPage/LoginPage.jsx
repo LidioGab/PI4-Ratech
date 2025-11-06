@@ -14,7 +14,7 @@ export default function LoginPage() {
   const { setUser } = useAuth();
 
   useEffect(() => {
-    // Se já estiver logado, redirecionar
+    document.title = 'Faça seu login';
     const clienteSession = localStorage.getItem('clienteSession');
     if (clienteSession) {
       const redirectPath = localStorage.getItem('redirectAfterLogin') || '/';

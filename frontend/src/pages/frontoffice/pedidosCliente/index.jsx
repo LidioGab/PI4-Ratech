@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import HeaderFrontoffice from '../../../components/headerFrontoffice';
+import HeaderPesquisa from '../../../components/headerPesquisa';
 import api from '../../../services/api';
 import './index.css';
 
@@ -13,6 +14,7 @@ export default function PedidosCliente() {
     const [error, setError] = useState('');
 
     useEffect(() => {
+        document.title = "Meus Pedidos"
         if (!user) {
             navigate('/login');
             return;
@@ -72,6 +74,7 @@ export default function PedidosCliente() {
     if (loading) {
         return (
             <div className="pedidos-cliente-page">
+                <HeaderPesquisa />
                 <HeaderFrontoffice nome="Meus Pedidos" showBackButton={true} backTo="/perfil-cliente" />
                 <div className="loading">Carregando pedidos...</div>
             </div>
@@ -80,7 +83,7 @@ export default function PedidosCliente() {
 
     return (
         <div className="pedidos-cliente-page">
-            <HeaderFrontoffice nome="Meus Pedidos" showBackButton={true} backTo="/perfil-cliente" />
+            <HeaderPesquisa />
             
             <div className="pedidos-container">
                 {error && <div className="error-message">{error}</div>}

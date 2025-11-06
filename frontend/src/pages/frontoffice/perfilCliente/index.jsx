@@ -2,6 +2,7 @@ import './index.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
+import HeaderPesquisa from '../../../components/headerPesquisa';
 import { validarCPF } from '../../../utils/cpf';
 
 export default function PerfilCliente() {
@@ -10,7 +11,7 @@ export default function PerfilCliente() {
   const [loading, setLoading] = useState(false);
   const [mensagem, setMensagem] = useState('');
   const [tipoMensagem, setTipoMensagem] = useState('');
-  
+
   // Estados para dados pessoais
   const [dadosPessoais, setDadosPessoais] = useState({
     nome: '',
@@ -45,6 +46,7 @@ export default function PerfilCliente() {
   const [mostrarNovoEndereco, setMostrarNovoEndereco] = useState(false);
 
   useEffect(() => {
+    document.title = "Meus Dados";
     const cliente = localStorage.getItem('clienteSession');
     if (!cliente) {
       navigate('/login');
@@ -66,7 +68,7 @@ export default function PerfilCliente() {
       setLoading(true);
       const response = await api.get(`/api/clientes/${clienteId}`);
       const cliente = response.data;
-      
+
       setDadosPessoais({
         nome: cliente.nome || '',
         email: cliente.email || '',
@@ -95,7 +97,7 @@ export default function PerfilCliente() {
 
   async function handleSalvarDadosPessoais(e) {
     e.preventDefault();
-    
+
     if (!dadosPessoais.nome.trim()) {
       mostrarMensagem('Nome é obrigatório', 'erro');
       return;
@@ -109,12 +111,12 @@ export default function PerfilCliente() {
     try {
       setLoading(true);
       await api.put(`/api/clientes/${clienteLogado.id}`, dadosPessoais);
-      
+
       // Atualizar sessão local
       const novaSessionData = { ...clienteLogado, nome: dadosPessoais.nome };
       localStorage.setItem('clienteSession', JSON.stringify(novaSessionData));
       setClienteLogado(novaSessionData);
-      
+
       mostrarMensagem('Dados atualizados com sucesso!', 'sucesso');
     } catch (error) {
       console.error('Erro ao atualizar dados:', error);
@@ -169,7 +171,7 @@ export default function PerfilCliente() {
     try {
       const response = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
       const dados = await response.json();
-      
+
       if (!dados.erro) {
         setNovoEndereco(prev => ({
           ...prev,
@@ -187,20 +189,27 @@ export default function PerfilCliente() {
   async function handleAdicionarEndereco(e) {
     e.preventDefault();
 
-    if (!novoEndereco.cep.trim() || !novoEndereco.logradouro.trim() || 
-        !novoEndereco.numero.trim() || !novoEndereco.bairro.trim() ||
-        !novoEndereco.cidade.trim() || !novoEndereco.estado.trim()) {
+    if (!novoEndereco.cep.trim() || !novoEndereco.logradouro.trim() ||
+      !novoEndereco.numero.trim() || !novoEndereco.bairro.trim() ||
+      !novoEndereco.cidade.trim() || !novoEndereco.estado.trim()) {
       mostrarMensagem('Todos os campos obrigatórios devem ser preenchidos', 'erro');
       return;
     }
 
     try {
       setLoading(true);
-      const response = await api.post(`/api/clientes/${clienteLogado.id}/enderecos`, {
+      // Backend expects CEP in format 00000-000. Our form stores digits-only (00000000).
+      const cepLimpo = (novoEndereco.cep || '').replace(/\D/g, '');
+      const cepFormatado = cepLimpo.length === 8 ? `${cepLimpo.slice(0,5)}-${cepLimpo.slice(5)}` : novoEndereco.cep;
+
+      const payload = {
         ...novoEndereco,
+        cep: cepFormatado,
         tipoEndereco: 'ENTREGA'
-      });
-      
+      };
+
+      const response = await api.post(`/api/clientes/${clienteLogado.id}/enderecos`, payload);
+
       setEnderecos(prev => [...prev, response.data]);
       setNovoEndereco({
         cep: '',
@@ -229,7 +238,7 @@ export default function PerfilCliente() {
     try {
       setLoading(true);
       await api.delete(`/api/clientes/${clienteLogado.id}/enderecos/${enderecoId}`);
-      
+
       setEnderecos(prev => prev.filter(end => end.id !== enderecoId));
       mostrarMensagem('Endereço removido com sucesso!', 'sucesso');
     } catch (error) {
@@ -246,278 +255,281 @@ export default function PerfilCliente() {
   }
 
   return (
-    <div className="perfil-cliente-container">
-      <div className="perfil-header">
-        <h1>Alterar Dados do Cliente</h1>
-        <p>Gerencie suas informações pessoais e endereços</p>
-      </div>
-
-      {mensagem && (
-        <div className={`mensagem ${tipoMensagem}`}>
-          {mensagem}
+    <div className="">
+      <HeaderPesquisa/>
+      <div className='perfil-cliente-container'>
+        <div className="perfil-header">
+          <h1>Alterar Dados do Cliente</h1>
+          <p>Gerencie suas informações pessoais e endereços</p>
         </div>
-      )}
 
-      <div className="perfil-content">
-        {/* Dados Pessoais */}
-        <section className="section-card">
-          <h2>Dados Pessoais</h2>
-          <form onSubmit={handleSalvarDadosPessoais}>
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Nome Completo *</label>
-                <input
-                  type="text"
-                  value={dadosPessoais.nome}
-                  onChange={(e) => setDadosPessoais(prev => ({...prev, nome: e.target.value}))}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Email *</label>
-                <input
-                  type="email"
-                  value={dadosPessoais.email}
-                  readOnly
-                  className="readonly"
-                  title="Email não pode ser alterado"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>CPF *</label>
-                <input
-                  type="text"
-                  value={dadosPessoais.cpf}
-                  readOnly
-                  className="readonly"
-                  title="CPF não pode ser alterado"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Data de Nascimento</label>
-                <input
-                  type="date"
-                  value={dadosPessoais.dataNascimento}
-                  onChange={(e) => setDadosPessoais(prev => ({...prev, dataNascimento: e.target.value}))}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Gênero</label>
-                <select
-                  value={dadosPessoais.genero}
-                  onChange={(e) => setDadosPessoais(prev => ({...prev, genero: e.target.value}))}
-                >
-                  <option value="">Selecione...</option>
-                  <option value="MASCULINO">Masculino</option>
-                  <option value="FEMININO">Feminino</option>
-                  <option value="OUTRO">Outro</option>
-                  <option value="PREFIRO_NAO_INFORMAR">Prefiro não informar</option>
-                </select>
-              </div>
-            </div>
-
-            <button type="submit" className="btn-primary" disabled={loading}>
-              {loading ? 'Salvando...' : 'Salvar Dados Pessoais'}
-            </button>
-          </form>
-        </section>
-
-        {/* Alteração de Senha */}
-        <section className="section-card">
-          <div className="section-header">
-            <h2>Alterar Senha</h2>
-            <button 
-              type="button" 
-              className="btn-toggle"
-              onClick={() => setMostrarSenha(!mostrarSenha)}
-            >
-              {mostrarSenha ? 'Cancelar' : 'Alterar Senha'}
-            </button>
+        {mensagem && (
+          <div className={`mensagem ${tipoMensagem}`}>
+            {mensagem}
           </div>
+        )}
 
-          {mostrarSenha && (
-            <form onSubmit={handleAlterarSenha}>
-              <div className="form-group">
-                <label>Senha Atual *</label>
-                <input
-                  type="password"
-                  value={senhas.senhaAtual}
-                  onChange={(e) => setSenhas(prev => ({...prev, senhaAtual: e.target.value}))}
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Nova Senha * (mínimo 6 caracteres)</label>
-                <input
-                  type="password"
-                  value={senhas.novaSenha}
-                  onChange={(e) => setSenhas(prev => ({...prev, novaSenha: e.target.value}))}
-                  minLength="6"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Confirmar Nova Senha *</label>
-                <input
-                  type="password"
-                  value={senhas.confirmarSenha}
-                  onChange={(e) => setSenhas(prev => ({...prev, confirmarSenha: e.target.value}))}
-                  required
-                />
-              </div>
-
-              <button type="submit" className="btn-primary" disabled={loading}>
-                {loading ? 'Alterando...' : 'Alterar Senha'}
-              </button>
-            </form>
-          )}
-        </section>
-
-        {/* Endereços */}
-        <section className="section-card">
-          <div className="section-header">
-            <h2>Endereços de Entrega</h2>
-            <button 
-              type="button" 
-              className="btn-add"
-              onClick={() => setMostrarNovoEndereco(!mostrarNovoEndereco)}
-            >
-              {mostrarNovoEndereco ? 'Cancelar' : '+ Adicionar Endereço'}
-            </button>
-          </div>
-
-          {/* Lista de endereços existentes */}
-          <div className="enderecos-lista">
-            {enderecos.map((endereco) => (
-              <div key={endereco.id} className="endereco-card">
-                <div className="endereco-info">
-                  <h4>{endereco.tipoEndereco}</h4>
-                  <p>
-                    {endereco.logradouro}, {endereco.numero}
-                    {endereco.complemento && `, ${endereco.complemento}`}
-                  </p>
-                  <p>{endereco.bairro} - {endereco.cidade}/{endereco.estado}</p>
-                  <p>CEP: {endereco.cep}</p>
-                </div>
-                <button 
-                  className="btn-remove"
-                  onClick={() => handleRemoverEndereco(endereco.id)}
-                  disabled={loading}
-                >
-                  Remover
-                </button>
-              </div>
-            ))}
-          </div>
-
-          {/* Formulário para novo endereço */}
-          {mostrarNovoEndereco && (
-            <form onSubmit={handleAdicionarEndereco} className="novo-endereco-form">
-              <h3>Adicionar Novo Endereço</h3>
-              
+        <div className="perfil-content">
+          {/* Dados Pessoais */}
+          <section className="section-card">
+            <h2>Dados Pessoais</h2>
+            <form onSubmit={handleSalvarDadosPessoais}>
               <div className="form-grid">
                 <div className="form-group">
-                  <label>CEP *</label>
+                  <label>Nome Completo *</label>
                   <input
                     type="text"
-                    value={novoEndereco.cep}
-                    onChange={(e) => {
-                      const valor = e.target.value.replace(/\D/g, '').slice(0, 8);
-                      setNovoEndereco(prev => ({...prev, cep: valor}));
-                      if (valor.length === 8) {
-                        buscarCEP(valor);
-                      }
-                    }}
-                    placeholder="00000000"
-                    maxLength="8"
+                    value={dadosPessoais.nome}
+                    onChange={(e) => setDadosPessoais(prev => ({ ...prev, nome: e.target.value }))}
                     required
                   />
                 </div>
 
                 <div className="form-group">
-                  <label>Tipo de Endereço</label>
+                  <label>Email *</label>
+                  <input
+                    type="email"
+                    value={dadosPessoais.email}
+                    readOnly
+                    className="readonly"
+                    title="Email não pode ser alterado"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>CPF *</label>
+                  <input
+                    type="text"
+                    value={dadosPessoais.cpf}
+                    readOnly
+                    className="readonly"
+                    title="CPF não pode ser alterado"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Data de Nascimento</label>
+                  <input
+                    type="date"
+                    value={dadosPessoais.dataNascimento}
+                    onChange={(e) => setDadosPessoais(prev => ({ ...prev, dataNascimento: e.target.value }))}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Gênero</label>
                   <select
-                    value={novoEndereco.tipoEndereco}
-                    onChange={(e) => setNovoEndereco(prev => ({...prev, tipoEndereco: e.target.value}))}
+                    value={dadosPessoais.genero}
+                    onChange={(e) => setDadosPessoais(prev => ({ ...prev, genero: e.target.value }))}
                   >
-                    <option value="ENTREGA">Entrega</option>
-                    <option value="COBRANCA">Cobrança</option>
+                    <option value="">Selecione...</option>
+                    <option value="MASCULINO">Masculino</option>
+                    <option value="FEMININO">Feminino</option>
+                    <option value="OUTRO">Outro</option>
+                    <option value="PREFIRO_NAO_INFORMAR">Prefiro não informar</option>
                   </select>
-                </div>
-
-                <div className="form-group full-width">
-                  <label>Logradouro *</label>
-                  <input
-                    type="text"
-                    value={novoEndereco.logradouro}
-                    onChange={(e) => setNovoEndereco(prev => ({...prev, logradouro: e.target.value}))}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Número *</label>
-                  <input
-                    type="text"
-                    value={novoEndereco.numero}
-                    onChange={(e) => setNovoEndereco(prev => ({...prev, numero: e.target.value}))}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Complemento</label>
-                  <input
-                    type="text"
-                    value={novoEndereco.complemento}
-                    onChange={(e) => setNovoEndereco(prev => ({...prev, complemento: e.target.value}))}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Bairro *</label>
-                  <input
-                    type="text"
-                    value={novoEndereco.bairro}
-                    onChange={(e) => setNovoEndereco(prev => ({...prev, bairro: e.target.value}))}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Cidade *</label>
-                  <input
-                    type="text"
-                    value={novoEndereco.cidade}
-                    onChange={(e) => setNovoEndereco(prev => ({...prev, cidade: e.target.value}))}
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Estado *</label>
-                  <input
-                    type="text"
-                    value={novoEndereco.estado}
-                    onChange={(e) => setNovoEndereco(prev => ({...prev, estado: e.target.value.toUpperCase()}))}
-                    maxLength="2"
-                    required
-                  />
                 </div>
               </div>
 
               <button type="submit" className="btn-primary" disabled={loading}>
-                {loading ? 'Adicionando...' : 'Adicionar Endereço'}
+                {loading ? 'Salvando...' : 'Salvar Dados Pessoais'}
               </button>
             </form>
-          )}
-        </section>
+          </section>
+
+          {/* Alteração de Senha */}
+          <section className="section-card">
+            <div className="section-header">
+              <h2>Alterar Senha</h2>
+              <button
+                type="button"
+                className="btn-toggle"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+              >
+                {mostrarSenha ? 'Cancelar' : 'Alterar Senha'}
+              </button>
+            </div>
+
+            {mostrarSenha && (
+              <form onSubmit={handleAlterarSenha}>
+                <div className="form-group">
+                  <label>Senha Atual *</label>
+                  <input
+                    type="password"
+                    value={senhas.senhaAtual}
+                    onChange={(e) => setSenhas(prev => ({ ...prev, senhaAtual: e.target.value }))}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Nova Senha * (mínimo 6 caracteres)</label>
+                  <input
+                    type="password"
+                    value={senhas.novaSenha}
+                    onChange={(e) => setSenhas(prev => ({ ...prev, novaSenha: e.target.value }))}
+                    minLength="6"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Confirmar Nova Senha *</label>
+                  <input
+                    type="password"
+                    value={senhas.confirmarSenha}
+                    onChange={(e) => setSenhas(prev => ({ ...prev, confirmarSenha: e.target.value }))}
+                    required
+                  />
+                </div>
+
+                <button type="submit" className="btn-primary" disabled={loading}>
+                  {loading ? 'Alterando...' : 'Alterar Senha'}
+                </button>
+              </form>
+            )}
+          </section>
+
+          {/* Endereços */}
+          <section className="section-card">
+            <div className="section-header">
+              <h2>Endereços de Entrega</h2>
+              <button
+                type="button"
+                className="btn-add"
+                onClick={() => setMostrarNovoEndereco(!mostrarNovoEndereco)}
+              >
+                {mostrarNovoEndereco ? 'Cancelar' : '+ Adicionar Endereço'}
+              </button>
+            </div>
+
+            {/* Lista de endereços existentes */}
+            <div className="enderecos-lista">
+              {enderecos.map((endereco) => (
+                <div key={endereco.id} className="endereco-card">
+                  <div className="endereco-info">
+                    <h4>{endereco.tipoEndereco}</h4>
+                    <p>
+                      {endereco.logradouro}, {endereco.numero}
+                      {endereco.complemento && `, ${endereco.complemento}`}
+                    </p>
+                    <p>{endereco.bairro} - {endereco.cidade}/{endereco.estado}</p>
+                    <p>CEP: {endereco.cep}</p>
+                  </div>
+                  <button
+                    className="btn-remove"
+                    onClick={() => handleRemoverEndereco(endereco.id)}
+                    disabled={loading}
+                  >
+                    Remover
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Formulário para novo endereço */}
+            {mostrarNovoEndereco && (
+              <form onSubmit={handleAdicionarEndereco} className="novo-endereco-form">
+                <h3>Adicionar Novo Endereço</h3>
+
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>CEP *</label>
+                    <input
+                      type="text"
+                      value={novoEndereco.cep}
+                      onChange={(e) => {
+                        const valor = e.target.value.replace(/\D/g, '').slice(0, 8);
+                        setNovoEndereco(prev => ({ ...prev, cep: valor }));
+                        if (valor.length === 8) {
+                          buscarCEP(valor);
+                        }
+                      }}
+                      placeholder="00000000"
+                      maxLength="8"
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Tipo de Endereço</label>
+                    <select
+                      value={novoEndereco.tipoEndereco}
+                      onChange={(e) => setNovoEndereco(prev => ({ ...prev, tipoEndereco: e.target.value }))}
+                    >
+                      <option value="ENTREGA">Entrega</option>
+                      <option value="COBRANCA">Cobrança</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group full-width">
+                    <label>Logradouro *</label>
+                    <input
+                      type="text"
+                      value={novoEndereco.logradouro}
+                      onChange={(e) => setNovoEndereco(prev => ({ ...prev, logradouro: e.target.value }))}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Número *</label>
+                    <input
+                      type="text"
+                      value={novoEndereco.numero}
+                      onChange={(e) => setNovoEndereco(prev => ({ ...prev, numero: e.target.value }))}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Complemento</label>
+                    <input
+                      type="text"
+                      value={novoEndereco.complemento}
+                      onChange={(e) => setNovoEndereco(prev => ({ ...prev, complemento: e.target.value }))}
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Bairro *</label>
+                    <input
+                      type="text"
+                      value={novoEndereco.bairro}
+                      onChange={(e) => setNovoEndereco(prev => ({ ...prev, bairro: e.target.value }))}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Cidade *</label>
+                    <input
+                      type="text"
+                      value={novoEndereco.cidade}
+                      onChange={(e) => setNovoEndereco(prev => ({ ...prev, cidade: e.target.value }))}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Estado *</label>
+                    <input
+                      type="text"
+                      value={novoEndereco.estado}
+                      onChange={(e) => setNovoEndereco(prev => ({ ...prev, estado: e.target.value.toUpperCase() }))}
+                      maxLength="2"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <button type="submit" className="btn-primary" disabled={loading}>
+                  {loading ? 'Adicionando...' : 'Adicionar Endereço'}
+                </button>
+              </form>
+            )}
+          </section>
+        </div>
       </div>
     </div>
   );

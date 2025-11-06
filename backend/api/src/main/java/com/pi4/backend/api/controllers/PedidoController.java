@@ -227,8 +227,13 @@ public class PedidoController {
             // Salvar pedido
             Pedido pedidoSalvo = pedidoRepository.save(pedido);
             
-            // Limpar carrinho do cliente
-            carrinhoRepository.deleteByClienteId(request.getClienteId());
+            // Limpar carrinho do cliente - tente remover, mas não falhe o pedido se houver problema na remoção
+            try {
+                carrinhoRepository.deleteByClienteId(request.getClienteId());
+            } catch (Exception ex) {
+                // Log de advertência — não queremos impedir a criação do pedido por falha na limpeza do carrinho
+                System.out.println("Aviso: não foi possível limpar o carrinho do cliente (id=" + request.getClienteId() + "): " + ex.getMessage());
+            }
             
             return ResponseEntity.status(201).body(pedidoSalvo);
             

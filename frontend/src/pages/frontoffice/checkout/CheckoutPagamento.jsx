@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../../context/CartContext';
 import './CheckoutPagamento.css';
+import HeaderPesquisa from '../../../components/headerPesquisa';
 
 const CheckoutPagamento = () => {
     const navigate = useNavigate();
     const { cart, total } = useCart();
-    
+
     const [formaPagamento, setFormaPagamento] = useState('boleto');
     const [dadosCartao, setDadosCartao] = useState({
         numero: '',
@@ -179,195 +180,198 @@ const CheckoutPagamento = () => {
     }
 
     return (
-        <div className="checkout-pagamento-container">
-            <div className="checkout-header">
-                <h1>Finalizar Compra</h1>
-                <div className="checkout-steps">
-                    <div className="step">1. Endereço</div>
-                    <div className="step active">2. Pagamento</div>
-                    <div className="step">3. Resumo</div>
-                </div>
-            </div>
-
-            <div className="checkout-content">
-                <div className="checkout-main">
-                    <div className="pagamento-section">
-                        <h2>Forma de Pagamento</h2>
-                        
-                        <div className="formas-pagamento">
-                            <div className="forma-pagamento-opcao">
-                                <label className="radio-container">
-                                    <input
-                                        type="radio"
-                                        name="formaPagamento"
-                                        value="boleto"
-                                        checked={formaPagamento === 'boleto'}
-                                        onChange={(e) => setFormaPagamento(e.target.value)}
-                                    />
-                                    <span className="checkmark"></span>
-                                    <div className="opcao-content">
-                                        <h3>Boleto Bancário</h3>
-                                        <p>Pagamento à vista com desconto de 5%</p>
-                                        <div className="opcao-valor">
-                                            <span className="valor-original">R$ {total.toFixed(2)}</span>
-                                            <span className="valor-desconto">R$ {(total * 0.95).toFixed(2)}</span>
-                                        </div>
-                                    </div>
-                                </label>
-                            </div>
-
-                            <div className="forma-pagamento-opcao">
-                                <label className="radio-container">
-                                    <input
-                                        type="radio"
-                                        name="formaPagamento"
-                                        value="cartao"
-                                        checked={formaPagamento === 'cartao'}
-                                        onChange={(e) => setFormaPagamento(e.target.value)}
-                                    />
-                                    <span className="checkmark"></span>
-                                    <div className="opcao-content">
-                                        <h3>Cartão de Crédito</h3>
-                                        <p>Parcelamento em até {opcoesParcelas.length}x no cartão</p>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-
-                        {formaPagamento === 'cartao' && (
-                            <div className="dados-cartao">
-                                <h3>Dados do Cartão</h3>
-                                
-                                <div className="form-row">
-                                    <div className="form-group flex-2">
-                                        <label>Número do Cartão</label>
-                                        <input
-                                            type="text"
-                                            value={dadosCartao.numero}
-                                            onChange={(e) => handleInputChange('numero', e.target.value)}
-                                            placeholder="1234 5678 9012 3456"
-                                            maxLength="19"
-                                        />
-                                        {errors.numero && <div className="error-text">{errors.numero}</div>}
-                                    </div>
-                                    
-                                    <div className="form-group flex-1">
-                                        <label>CVV</label>
-                                        <input
-                                            type="text"
-                                            value={dadosCartao.cvv}
-                                            onChange={(e) => handleInputChange('cvv', e.target.value)}
-                                            placeholder="123"
-                                            maxLength="4"
-                                        />
-                                        {errors.cvv && <div className="error-text">{errors.cvv}</div>}
-                                    </div>
-                                </div>
-
-                                <div className="form-row">
-                                    <div className="form-group flex-2">
-                                        <label>Nome do Portador</label>
-                                        <input
-                                            type="text"
-                                            value={dadosCartao.nome}
-                                            onChange={(e) => handleInputChange('nome', e.target.value)}
-                                            placeholder="Nome como impresso no cartão"
-                                        />
-                                        {errors.nome && <div className="error-text">{errors.nome}</div>}
-                                    </div>
-                                    
-                                    <div className="form-group flex-1">
-                                        <label>Vencimento</label>
-                                        <input
-                                            type="text"
-                                            value={dadosCartao.vencimento}
-                                            onChange={(e) => handleInputChange('vencimento', e.target.value)}
-                                            placeholder="MM/AA"
-                                            maxLength="5"
-                                        />
-                                        {errors.vencimento && <div className="error-text">{errors.vencimento}</div>}
-                                    </div>
-                                </div>
-
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label>Parcelamento</label>
-                                        <select
-                                            value={dadosCartao.parcelas}
-                                            onChange={(e) => setDadosCartao(prev => ({ ...prev, parcelas: e.target.value }))}
-                                        >
-                                            {opcoesParcelas.map(parcela => (
-                                                <option key={parcela.numero} value={parcela.numero}>
-                                                    {parcela.numero}x de R$ {parcela.valor.toFixed(2)}
-                                                    {parcela.semJuros ? ' sem juros' : ` (Total: R$ ${parcela.total.toFixed(2)})`}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+        <div className="">
+            <HeaderPesquisa/>
+            <div className='checkout-pagamento-container'>
+                <div className="checkout-header">
+                    <h1>Finalizar Compra</h1>
+                    <div className="checkout-steps">
+                        <div className="step">1. Endereço</div>
+                        <div className="step active">2. Pagamento</div>
+                        <div className="step">3. Resumo</div>
                     </div>
                 </div>
 
-                <div className="checkout-sidebar">
-                    <div className="resumo-pedido">
-                        <h3>Resumo do Pedido</h3>
-                        
-                        <div className="itens-resumo">
-                            {cart.map(item => (
-                                <div key={item.id} className="item-resumo">
-                                    <div className="item-nome">
-                                        {item.nome} x{item.quantidade}
-                                    </div>
-                                    <div className="item-valor">
-                                        R$ {(item.preco * item.quantidade).toFixed(2)}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                <div className="checkout-content">
+                    <div className="checkout-main">
+                        <div className="pagamento-section">
+                            <h2>Forma de Pagamento</h2>
 
-                        <div className="total-resumo">
-                            <div className="subtotal">
-                                Subtotal: R$ {total.toFixed(2)}
+                            <div className="formas-pagamento">
+                                <div className="forma-pagamento-opcao">
+                                    <label className="radio-container">
+                                        <input
+                                            type="radio"
+                                            name="formaPagamento"
+                                            value="boleto"
+                                            checked={formaPagamento === 'boleto'}
+                                            onChange={(e) => setFormaPagamento(e.target.value)}
+                                        />
+                                        <span className="checkmark"></span>
+                                        <div className="opcao-content">
+                                            <h3>Boleto Bancário</h3>
+                                            <p>Pagamento à vista com desconto de 5%</p>
+                                            <div className="opcao-valor">
+                                                <span className="valor-original">R$ {total.toFixed(2)}</span>
+                                                <span className="valor-desconto">R$ {(total * 0.95).toFixed(2)}</span>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div className="forma-pagamento-opcao">
+                                    <label className="radio-container">
+                                        <input
+                                            type="radio"
+                                            name="formaPagamento"
+                                            value="cartao"
+                                            checked={formaPagamento === 'cartao'}
+                                            onChange={(e) => setFormaPagamento(e.target.value)}
+                                        />
+                                        <span className="checkmark"></span>
+                                        <div className="opcao-content">
+                                            <h3>Cartão de Crédito</h3>
+                                            <p>Parcelamento em até {opcoesParcelas.length}x no cartão</p>
+                                        </div>
+                                    </label>
+                                </div>
                             </div>
-                            
-                            {formaPagamento === 'boleto' && (
-                                <>
-                                    <div className="desconto">
-                                        Desconto (5%): -R$ {(total * 0.05).toFixed(2)}
-                                    </div>
-                                    <div className="total-final">
-                                        <strong>Total: R$ {(total * 0.95).toFixed(2)}</strong>
-                                    </div>
-                                </>
-                            )}
 
                             {formaPagamento === 'cartao' && (
-                                <div className="total-final">
-                                    <strong>
-                                        Total: R$ {
-                                            opcoesParcelas.find(p => p.numero === parseInt(dadosCartao.parcelas))?.total.toFixed(2) || total.toFixed(2)
-                                        }
-                                    </strong>
+                                <div className="dados-cartao">
+                                    <h3>Dados do Cartão</h3>
+
+                                    <div className="form-row">
+                                        <div className="form-group flex-2">
+                                            <label>Número do Cartão</label>
+                                            <input
+                                                type="text"
+                                                value={dadosCartao.numero}
+                                                onChange={(e) => handleInputChange('numero', e.target.value)}
+                                                placeholder="1234 5678 9012 3456"
+                                                maxLength="19"
+                                            />
+                                            {errors.numero && <div className="error-text">{errors.numero}</div>}
+                                        </div>
+
+                                        <div className="form-group flex-1">
+                                            <label>CVV</label>
+                                            <input
+                                                type="text"
+                                                value={dadosCartao.cvv}
+                                                onChange={(e) => handleInputChange('cvv', e.target.value)}
+                                                placeholder="123"
+                                                maxLength="4"
+                                            />
+                                            {errors.cvv && <div className="error-text">{errors.cvv}</div>}
+                                        </div>
+                                    </div>
+
+                                    <div className="form-row">
+                                        <div className="form-group flex-2">
+                                            <label>Nome do Portador</label>
+                                            <input
+                                                type="text"
+                                                value={dadosCartao.nome}
+                                                onChange={(e) => handleInputChange('nome', e.target.value)}
+                                                placeholder="Nome como impresso no cartão"
+                                            />
+                                            {errors.nome && <div className="error-text">{errors.nome}</div>}
+                                        </div>
+
+                                        <div className="form-group flex-1">
+                                            <label>Vencimento</label>
+                                            <input
+                                                type="text"
+                                                value={dadosCartao.vencimento}
+                                                onChange={(e) => handleInputChange('vencimento', e.target.value)}
+                                                placeholder="MM/AA"
+                                                maxLength="5"
+                                            />
+                                            {errors.vencimento && <div className="error-text">{errors.vencimento}</div>}
+                                        </div>
+                                    </div>
+
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label>Parcelamento</label>
+                                            <select
+                                                value={dadosCartao.parcelas}
+                                                onChange={(e) => setDadosCartao(prev => ({ ...prev, parcelas: e.target.value }))}
+                                            >
+                                                {opcoesParcelas.map(parcela => (
+                                                    <option key={parcela.numero} value={parcela.numero}>
+                                                        {parcela.numero}x de R$ {parcela.valor.toFixed(2)}
+                                                        {parcela.semJuros ? ' sem juros' : ` (Total: R$ ${parcela.total.toFixed(2)})`}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div className="checkout-actions">
-                <button type="button" className="btn-voltar" onClick={handleVoltar}>
-                    Voltar
-                </button>
-                <button 
-                    type="button" 
-                    className="btn-continuar"
-                    onClick={handleContinuar}
-                >
-                    Continuar
-                </button>
+                    <div className="checkout-sidebar">
+                        <div className="resumo-pedido">
+                            <h3>Resumo do Pedido</h3>
+
+                            <div className="itens-resumo">
+                                {cart.map(item => (
+                                    <div key={item.id} className="item-resumo">
+                                        <div className="item-nome">
+                                            {item.nome} x{item.quantidade}
+                                        </div>
+                                        <div className="item-valor">
+                                            R$ {(item.preco * item.quantidade).toFixed(2)}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="total-resumo">
+                                <div className="subtotal">
+                                    Subtotal: R$ {total.toFixed(2)}
+                                </div>
+
+                                {formaPagamento === 'boleto' && (
+                                    <>
+                                        <div className="desconto">
+                                            Desconto (5%): -R$ {(total * 0.05).toFixed(2)}
+                                        </div>
+                                        <div className="total-final">
+                                            <strong>Total: R$ {(total * 0.95).toFixed(2)}</strong>
+                                        </div>
+                                    </>
+                                )}
+
+                                {formaPagamento === 'cartao' && (
+                                    <div className="total-final">
+                                        <strong>
+                                            Total: R$ {
+                                                opcoesParcelas.find(p => p.numero === parseInt(dadosCartao.parcelas))?.total.toFixed(2) || total.toFixed(2)
+                                            }
+                                        </strong>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="checkout-actions">
+                    <button type="button" className="btn-voltar" onClick={handleVoltar}>
+                        Voltar
+                    </button>
+                    <button
+                        type="button"
+                        className="btn-continuar"
+                        onClick={handleContinuar}
+                    >
+                        Continuar
+                    </button>
+                </div>
             </div>
         </div>
     );

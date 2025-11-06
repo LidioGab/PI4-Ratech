@@ -25,6 +25,7 @@ export default function PaginaInicial(){
     .slice(0, 10)
 
   useEffect(()=>{
+    document.title = "Ratech | Pagina inicial"
     buscarProdutos()
   }, [])
 

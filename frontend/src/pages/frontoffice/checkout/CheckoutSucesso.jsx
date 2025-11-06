@@ -35,7 +35,7 @@ const CheckoutSucesso = () => {
     };
 
     const handleVerPedidos = () => {
-        navigate('/perfil-cliente?tab=pedidos');
+        navigate('/meus-pedidos');
     };
 
     const formatarDataHora = (dataISO) => {
