@@ -12,11 +12,11 @@ public interface CarrinhoRepository extends JpaRepository<CarrinhoItem, Long> {
     
     List<CarrinhoItem> findByClienteId(Integer clienteId);
     
-    CarrinhoItem findByClienteIdAndProdutoId(Integer clienteId, Long produtoId);
+    CarrinhoItem findByClienteIdAndProdutoId(Integer clienteId, Integer produtoId);
     
     void deleteByClienteId(Integer clienteId);
     
-    void deleteByClienteIdAndProdutoId(Integer clienteId, Long produtoId);
+    void deleteByClienteIdAndProdutoId(Integer clienteId, Integer produtoId);
     
     @Query("SELECT COUNT(c) FROM CarrinhoItem c WHERE c.cliente.id = :clienteId")
     Long countByClienteId(@Param("clienteId") Integer clienteId);

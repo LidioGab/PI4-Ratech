@@ -40,8 +40,8 @@ public class ProdutoController {
             @RequestParam(value = "status", required = false) Boolean status,
             @RequestParam(value = "sort", required = false) String sortParam) {
 
-        // Construir Sort
-        Sort sort = Sort.by(Sort.Direction.DESC, "id"); // default
+        // Construir Sort - Sprint 2: ordenação decrescente por data criação (últimos inseridos primeiro)
+        Sort sort = Sort.by(Sort.Direction.DESC, "dataCriacao");
         if (sortParam != null && !sortParam.isBlank()) {
             String[] parts = sortParam.split(",");
             if (parts.length == 2) {
@@ -77,7 +77,7 @@ public class ProdutoController {
     }
     
     @GetMapping("/{id:[0-9]+}")
-    public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Produto> buscarPorId(@PathVariable Integer id) {
         return repository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
@@ -104,7 +104,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id:[0-9]+}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produtoAtualizado) {
+    public ResponseEntity<Produto> atualizar(@PathVariable Integer id, @RequestBody Produto produtoAtualizado) {
         var opt = repository.findById(id);
         if (opt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -134,7 +134,7 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{id:[0-9]+}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         if (!repository.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -143,7 +143,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id:[0-9]+}/status")
-    public ResponseEntity<Produto> toggleStatus(@PathVariable Long id) {
+    public ResponseEntity<Produto> toggleStatus(@PathVariable Integer id) {
         return repository.findById(id).map(p -> {
             p.setStatus(!Boolean.TRUE.equals(p.getStatus()));
             return ResponseEntity.ok(repository.save(p));

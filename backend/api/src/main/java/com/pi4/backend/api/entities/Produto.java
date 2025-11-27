@@ -26,7 +26,7 @@ public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_produto")
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false, length = 200)
     private String nome;
@@ -55,7 +55,7 @@ public class Produto {
 
     public Produto() {}
 
-    public Long getId() { return id; }
+    public Integer getId() { return id; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public BigDecimal getPreco() { return preco; }

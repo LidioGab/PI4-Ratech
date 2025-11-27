@@ -99,12 +99,12 @@ public class PedidoController {
     }
     
     public static class ItemPedidoDto {
-        private Long produtoId;
+        private Integer produtoId; // Changed from Long to Integer to match database
         private Integer quantidade;
         private BigDecimal precoUnitario;
         
-        public Long getProdutoId() { return produtoId; }
-        public void setProdutoId(Long produtoId) { this.produtoId = produtoId; }
+        public Integer getProdutoId() { return produtoId; }
+        public void setProdutoId(Integer produtoId) { this.produtoId = produtoId; }
         public Integer getQuantidade() { return quantidade; }
         public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
         public BigDecimal getPrecoUnitario() { return precoUnitario; }
@@ -123,21 +123,31 @@ public class PedidoController {
     @Transactional
     public ResponseEntity<?> criarPedido(@RequestBody CriarPedidoRequest request) {
         try {
+            System.out.println("=== INICIANDO CRIAÇÃO DE PEDIDO ===");
+            System.out.println("ClienteId: " + request.getClienteId());
+            System.out.println("Quantidade de itens: " + (request.getItens() != null ? request.getItens().size() : 0));
+            
             if (request.getClienteId() == null) {
+                System.out.println("ERRO: Cliente ID é nulo");
                 return ResponseEntity.status(400).body("Cliente ID é obrigatório");
             }
             
             if (request.getItens() == null || request.getItens().isEmpty()) {
+                System.out.println("ERRO: Itens do pedido são nulos ou vazios");
                 return ResponseEntity.status(400).body("Itens do pedido são obrigatórios");
             }
             
+            System.out.println("Buscando cliente no banco...");
             Cliente cliente = clienteRepository.findById(request.getClienteId())
                 .orElse(null);
             if (cliente == null) {
+                System.out.println("ERRO: Cliente não encontrado no banco");
                 return ResponseEntity.status(404).body("Cliente não encontrado");
             }
             
+            System.out.println("Cliente encontrado: " + cliente.getNome());
             if (!cliente.getStatus()) {
+                System.out.println("ERRO: Cliente está inativo");
                 return ResponseEntity.status(403).body("Cliente inativo");
             }
             
@@ -224,6 +234,9 @@ public class PedidoController {
             pedido.setValorFrete(valorFrete);
             pedido.setValorTotal(subtotal.add(valorFrete));
             
+            System.out.println("Status do pedido antes de salvar: " + pedido.getStatus());
+            System.out.println("Status em string: " + pedido.getStatus().name());
+            
             // Salvar pedido
             Pedido pedidoSalvo = pedidoRepository.save(pedido);
             
@@ -293,27 +306,7 @@ public class PedidoController {
         }
     }
     
-    // Atualizar status do pedido
-    @PutMapping("/{id}/status")
-    public ResponseEntity<?> atualizarStatus(
-            @PathVariable Long id,
-            @RequestBody AtualizarStatusRequest request) {
-        try {
-            Optional<Pedido> pedidoOpt = pedidoRepository.findById(id);
-            if (pedidoOpt.isEmpty()) {
-                return ResponseEntity.status(404).body("Pedido não encontrado");
-            }
-            
-            Pedido pedido = pedidoOpt.get();
-            pedido.setStatus(request.getStatus());
-            
-            Pedido pedidoAtualizado = pedidoRepository.save(pedido);
-            return ResponseEntity.ok(pedidoAtualizado);
-            
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erro interno do servidor");
-        }
-    }
+
     
     // Listar todos os pedidos (admin)
     @GetMapping("/admin")
@@ -337,6 +330,45 @@ public class PedidoController {
             }
             
             return ResponseEntity.ok(pedidos);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro interno do servidor");
+        }
+    }
+    
+    // Sprint 6 - Listar todos os pedidos para estoquista (ordenados por data decrescente)
+    @GetMapping("/admin/todos")
+    public ResponseEntity<?> listarTodosPedidosAdmin(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            Page<Pedido> pedidos = pedidoRepository.findAllByOrderByDataPedidoDesc(pageable);
+            
+            return ResponseEntity.ok(pedidos);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro interno do servidor");
+        }
+    }
+    
+    // Sprint 6 - Alterar status do pedido (para estoquista)
+    @PutMapping("/{id}/status")
+    public ResponseEntity<?> alterarStatusPedido(
+            @PathVariable Long id,
+            @RequestBody AtualizarStatusRequest request) {
+        try {
+            Optional<Pedido> pedidoOpt = pedidoRepository.findById(id);
+            if (!pedidoOpt.isPresent()) {
+                return ResponseEntity.status(404).body("Pedido não encontrado");
+            }
+            
+            Pedido pedido = pedidoOpt.get();
+            pedido.setStatus(request.getStatus());
+            pedido.setDataAtualizacao(LocalDateTime.now());
+            
+            pedidoRepository.save(pedido);
+            
+            return ResponseEntity.ok(pedido);
+            
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Erro interno do servidor");
         }

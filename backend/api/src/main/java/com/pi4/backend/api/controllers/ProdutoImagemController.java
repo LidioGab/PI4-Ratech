@@ -46,7 +46,7 @@ public class ProdutoImagemController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> upload(@PathVariable("id") Long produtoId,
+    public ResponseEntity<?> upload(@PathVariable("id") Integer produtoId,
                                     @RequestParam("files") List<MultipartFile> files,
                                     @RequestParam(value = "principalIndex", required = false) Integer principalIndex) {
         log.debug("Upload imagens produto={} totalArquivos={} principalIndex={}", produtoId, (files!=null?files.size():0), principalIndex);
@@ -96,7 +96,7 @@ public class ProdutoImagemController {
 
     @PutMapping("/{idImagem:[0-9]+}/principal")
     @Transactional
-    public ResponseEntity<?> definirPrincipal(@PathVariable("id") Long produtoId,
+    public ResponseEntity<?> definirPrincipal(@PathVariable("id") Integer produtoId,
                                               @PathVariable("idImagem") Long idImagem) {
         Optional<Produto> optProd = produtoRepository.findById(produtoId);
         if (optProd.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
@@ -119,7 +119,7 @@ public class ProdutoImagemController {
 
     @DeleteMapping("/{idImagem:[0-9]+}")
     @Transactional
-    public ResponseEntity<?> remover(@PathVariable("id") Long produtoId,
+    public ResponseEntity<?> remover(@PathVariable("id") Integer produtoId,
                                      @PathVariable("idImagem") Long idImagem) {
         Optional<ProdutoImagem> opt = imagemRepository.findById(idImagem);
         if (opt.isEmpty() || !opt.get().getProduto().getId().equals(produtoId)) {

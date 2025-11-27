@@ -28,6 +28,9 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     // Buscar pedidos por status com paginação
     Page<Pedido> findByStatusOrderByDataPedidoDesc(Pedido.StatusPedido status, Pageable pageable);
     
+    // Sprint 6 - Buscar todos os pedidos ordenados por data decrescente (para estoquistas)
+    Page<Pedido> findAllByOrderByDataPedidoDesc(Pageable pageable);
+    
     // Contar pedidos por cliente
     @Query("SELECT COUNT(p) FROM Pedido p WHERE p.cliente.id = :clienteId")
     Long countByClienteId(@Param("clienteId") Integer clienteId);

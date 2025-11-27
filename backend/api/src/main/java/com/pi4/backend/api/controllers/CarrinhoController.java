@@ -38,14 +38,14 @@ public class CarrinhoController {
     // DTO para requests
     public static class AdicionarItemRequest {
         private Integer clienteId;
-        private Long produtoId;
+        private Integer produtoId;
         private Integer quantidade;
         
         // Getters e Setters
         public Integer getClienteId() { return clienteId; }
         public void setClienteId(Integer clienteId) { this.clienteId = clienteId; }
-        public Long getProdutoId() { return produtoId; }
-        public void setProdutoId(Long produtoId) { this.produtoId = produtoId; }
+        public Integer getProdutoId() { return produtoId; }
+        public void setProdutoId(Integer produtoId) { this.produtoId = produtoId; }
         public Integer getQuantidade() { return quantidade; }
         public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
     }
@@ -140,7 +140,7 @@ public class CarrinhoController {
     @PutMapping("/{clienteId}/item/{produtoId}")
     public ResponseEntity<?> atualizarQuantidade(
             @PathVariable Integer clienteId,
-            @PathVariable Long produtoId,
+            @PathVariable Integer produtoId,
             @RequestBody AtualizarQuantidadeRequest request) {
         try {
             if (request.getQuantidade() == null || request.getQuantidade() <= 0) {
@@ -171,7 +171,7 @@ public class CarrinhoController {
     
     // Remover item do carrinho
     @DeleteMapping("/{clienteId}/item/{produtoId}")
-    public ResponseEntity<?> removerItem(@PathVariable Integer clienteId, @PathVariable Long produtoId) {
+    public ResponseEntity<?> removerItem(@PathVariable Integer clienteId, @PathVariable Integer produtoId) {
         try {
             CarrinhoItem item = carrinhoRepository
                 .findByClienteIdAndProdutoId(clienteId, produtoId);

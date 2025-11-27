@@ -86,12 +86,13 @@ public class Pedido {
     
     // Enum para status do pedido
     public enum StatusPedido {
-        PENDENTE("Pendente"),
-        CONFIRMADO("Confirmado"),
-        PROCESSANDO("Processando"),
-        ENVIADO("Enviado"),
-        ENTREGUE("Entregue"),
-        CANCELADO("Cancelado");
+        AGUARDANDO_PAGAMENTO("aguardando pagamento"),
+        PAGAMENTO_REJEITADO("pagamento rejeitado"),
+        PAGAMENTO_COM_SUCESSO("pagamento com sucesso"),
+        AGUARDANDO_RETIRADA("aguardando retirada"),
+        EM_TRANSITO("em transito"),
+        ENTREGUE("entregue"),
+        CANCELADO("cancelado");
         
         private String descricao;
         
@@ -108,7 +109,7 @@ public class Pedido {
     public Pedido() {
         this.dataPedido = LocalDateTime.now();
         this.dataAtualizacao = LocalDateTime.now();
-        this.status = StatusPedido.PENDENTE;
+        this.status = StatusPedido.AGUARDANDO_PAGAMENTO;
     }
     
     public Pedido(Cliente cliente, String numeroPedido) {

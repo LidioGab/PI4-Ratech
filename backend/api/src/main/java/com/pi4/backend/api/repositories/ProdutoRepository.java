@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.pi4.backend.api.entities.Produto;
 
 @Repository
-public interface ProdutoRepository extends JpaRepository<Produto, Long> {
+public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 	Page<Produto> findByNomeContainingIgnoreCase(String nome, Pageable pageable);
 	Page<Produto> findByStatus(Boolean status, Pageable pageable);
 	Page<Produto> findByNomeContainingIgnoreCaseAndStatus(String nome, Boolean status, Pageable pageable);

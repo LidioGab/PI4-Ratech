@@ -152,7 +152,7 @@ class CheckoutControllerTest {
     void deveRetornarErroQuandoProdutoNaoEncontrado() {
         // Arrange
         when(clienteRepository.findById(1)).thenReturn(Optional.of(cliente));
-        when(produtoRepository.findById(1L)).thenReturn(Optional.empty());
+        when(produtoRepository.findById(1)).thenReturn(Optional.empty());
 
         // Act
         ResponseEntity<?> response = checkoutController.iniciarCheckout(checkoutRequest);

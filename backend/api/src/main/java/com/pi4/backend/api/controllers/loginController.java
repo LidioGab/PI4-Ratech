@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pi4.backend.api.services.LoginService;
+import com.pi4.backend.api.dto.SessionDto;
 
 @RestController
 @CrossOrigin(origins = "*")
-public class loginController {
+public class LoginController {
 
-    private static final Logger log = LoggerFactory.getLogger(loginController.class);
+    private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     private LoginService loginService; // Injeção do novo Service
@@ -24,24 +25,17 @@ public class loginController {
     public static class LoginDto {
         private String email;
         private String senha;
+        private String senhaHash;
+        
         public String getEmail() { return email; }
         public void setEmail(String email) { this.email = email; }
         public String getSenha() { return senha; }
         public void setSenha(String senha) { this.senha = senha; }
+        public String getSenhaHash() { return senhaHash; }
+        public void setSenhaHash(String senhaHash) { this.senhaHash = senhaHash; }
     }
 
-    public static class SessionDto {
-        private Integer id;
-        private String nome;
-        private String grupo;
-        // Seus getters e setters existentes...
-        public Integer getId() { return id; }
-        public void setId(Integer id) { this.id = id; }
-        public String getNome() { return nome; }
-        public void setNome(String nome) { this.nome = nome; }
-        public String getGrupo() { return grupo; }
-        public void setGrupo(String grupo) { this.grupo = grupo; }
-    }
+
 
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
