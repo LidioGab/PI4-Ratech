@@ -1,0 +1,324 @@
+.detalhes-pedido-page {
+    min-height: 100vh;
+    background-color: #f9fafb;
+}
+
+.detalhes-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.detalhes-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.detalhes-header h1 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.btn-voltar {
+    background-color: #6b7280;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-voltar:hover {
+    background-color: #374151;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pedido-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.pedido-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pedido-numero h2 {
+    margin: 0 0 0.5rem 0;
+    color: #1f2937;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.pedido-data {
+    color: #6b7280;
+    font-size: 1rem;
+}
+
+.status-badge-large {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pedido-content {
+    padding: 2rem;
+}
+
+.section {
+    margin-bottom: 2.5rem;
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}
+
+.section h3 {
+    margin: 0 0 1.5rem 0;
+    color: #1f2937;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+}
+
+/* Tabela de itens */
+.itens-table {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.itens-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.itens-table th {
+    background-color: #f8fafc;
+    color: #374151;
+    font-weight: 600;
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 2px solid #e5e7eb;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.itens-table td {
+    padding: 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: top;
+    color: #374151;
+}
+
+.itens-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.itens-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.produto-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.produto-info strong {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.produto-descricao {
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+/* Resumo financeiro */
+.resumo-financeiro {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.resumo-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    color: #374151;
+}
+
+.resumo-item.total {
+    border-top: 2px solid #e5e7eb;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #1f2937;
+}
+
+/* Endereço */
+.endereco-info {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+    line-height: 1.6;
+}
+
+.endereco-info p {
+    margin: 0.25rem 0;
+    color: #374151;
+}
+
+/* Observações */
+.observacoes {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.observacoes p {
+    margin: 0;
+    color: #374151;
+    line-height: 1.6;
+}
+
+/* Loading */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    text-align: center;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e5e7eb;
+    border-top: 4px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading p {
+    color: #6b7280;
+    font-size: 1.125rem;
+}
+
+/* Error */
+.error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    padding: 2rem;
+}
+
+.error-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 3rem;
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.error-card h2 {
+    margin: 0 0 1rem 0;
+    color: #ef4444;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.error-card p {
+    margin: 0 0 2rem 0;
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .detalhes-container {
+        padding: 1rem;
+    }
+    
+    .detalhes-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .detalhes-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .pedido-header-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .pedido-content {
+        padding: 1.5rem;
+    }
+    
+    .itens-table {
+        overflow-x: auto;
+    }
+    
+    .itens-table th,
+    .itens-table td {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .resumo-financeiro,
+    .endereco-info,
+    .observacoes {
+        padding: 1rem;
+    }
+}

@@ -87,7 +87,7 @@ export default function ListarUsuarios() {
       <div className="admin-layout">
         <MenuLateral />
         <div className="admin-content">
-        <Header nome={"Cadastro e edição de usuarios"}/>
+        <Header nome={"Cadastro e edição de usuários"}/>
           <div className="usuarios-page">
             <div className="usuarios-header">
               <h1>Lista de Usuários</h1>

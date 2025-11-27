@@ -20,7 +20,8 @@ const CheckoutSucesso = () => {
             setTimeout(() => {
                 setPedido({
                     id: pedidoId,
-                    status: 'PENDENTE',
+                    numeroPedido: pedidoId,
+                    status: 'AGUARDANDO_PAGAMENTO',
                     dataHora: new Date().toISOString()
                 });
                 setLoading(false);
@@ -44,36 +45,28 @@ const CheckoutSucesso = () => {
     };
 
     const getStatusColor = (status) => {
-        switch (status) {
-            case 'PENDENTE':
-                return '#ffc107';
-            case 'CONFIRMADO':
-                return '#28a745';
-            case 'ENVIADO':
-                return '#007bff';
-            case 'ENTREGUE':
-                return '#28a745';
-            case 'CANCELADO':
-                return '#dc3545';
-            default:
-                return '#6c757d';
+        switch(status) {
+            case 'AGUARDANDO_PAGAMENTO': return '#fbbf24';
+            case 'PAGAMENTO_REJEITADO': return '#ef4444';
+            case 'PAGAMENTO_COM_SUCESSO': return '#10b981';
+            case 'AGUARDANDO_RETIRADA': return '#3b82f6';
+            case 'EM_TRANSITO': return '#8b5cf6';
+            case 'ENTREGUE': return '#059669';
+            case 'CANCELADO': return '#6b7280';
+            default: return '#6b7280';
         }
     };
 
     const getStatusTexto = (status) => {
-        switch (status) {
-            case 'PENDENTE':
-                return 'Aguardando Confirmação';
-            case 'CONFIRMADO':
-                return 'Pedido Confirmado';
-            case 'ENVIADO':
-                return 'Pedido Enviado';
-            case 'ENTREGUE':
-                return 'Pedido Entregue';
-            case 'CANCELADO':
-                return 'Pedido Cancelado';
-            default:
-                return status;
+        switch(status) {
+            case 'AGUARDANDO_PAGAMENTO': return 'Aguardando Pagamento';
+            case 'PAGAMENTO_REJEITADO': return 'Pagamento Rejeitado';
+            case 'PAGAMENTO_COM_SUCESSO': return 'Pagamento com Sucesso';
+            case 'AGUARDANDO_RETIRADA': return 'Aguardando Retirada';
+            case 'EM_TRANSITO': return 'Em Trânsito';
+            case 'ENTREGUE': return 'Entregue';
+            case 'CANCELADO': return 'Cancelado';
+            default: return status;
         }
     };
 
@@ -109,7 +102,7 @@ const CheckoutSucesso = () => {
                     <div className="info-card">
                         <div className="info-row">
                             <span className="info-label">Número do Pedido:</span>
-                            <span className="info-value pedido-numero">#{pedido?.id}</span>
+                            <span className="info-value pedido-numero">#{pedido?.numeroPedido || pedido?.id}</span>
                         </div>
                         
                         <div className="info-row">

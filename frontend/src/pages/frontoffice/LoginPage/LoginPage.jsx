@@ -48,7 +48,7 @@ export default function LoginPage() {
         }
       } else {
         // Se não for cliente, não permitir login
-        setError('Esta página é apenas para clientes. Use o login administrativo.');
+        setError('Esta tela de login é apenas para clientes.');
       }
     } catch (err) {
       const msg = err?.response?.data || 'Falha no login';

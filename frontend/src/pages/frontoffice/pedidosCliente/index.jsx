@@ -44,31 +44,37 @@ export default function PedidosCliente() {
     };
 
     const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('pt-BR');
+        return new Date(dateString).toLocaleString('pt-BR');
     };
 
     const getStatusText = (status) => {
-        const statusMap = {
-            'PENDENTE': 'Pendente',
-            'CONFIRMADO': 'Confirmado',
-            'EM_PREPARACAO': 'Em Preparação',
-            'ENVIADO': 'Enviado',
-            'ENTREGUE': 'Entregue',
-            'CANCELADO': 'Cancelado'
-        };
-        return statusMap[status] || status;
+        switch(status) {
+            case 'AGUARDANDO_PAGAMENTO': return 'Aguardando Pagamento';
+            case 'PAGAMENTO_REJEITADO': return 'Pagamento Rejeitado';
+            case 'PAGAMENTO_COM_SUCESSO': return 'Pagamento com Sucesso';
+            case 'AGUARDANDO_RETIRADA': return 'Aguardando Retirada';
+            case 'EM_TRANSITO': return 'Em Trânsito';
+            case 'ENTREGUE': return 'Entregue';
+            case 'CANCELADO': return 'Cancelado';
+            default: return status;
+        }
+    };
+
+    const getStatusColor = (status) => {
+        switch(status) {
+            case 'AGUARDANDO_PAGAMENTO': return '#fbbf24';
+            case 'PAGAMENTO_REJEITADO': return '#ef4444';
+            case 'PAGAMENTO_COM_SUCESSO': return '#10b981';
+            case 'AGUARDANDO_RETIRADA': return '#3b82f6';
+            case 'EM_TRANSITO': return '#8b5cf6';
+            case 'ENTREGUE': return '#059669';
+            case 'CANCELADO': return '#6b7280';
+            default: return '#6b7280';
+        }
     };
 
     const getStatusClass = (status) => {
-        const classMap = {
-            'PENDENTE': 'status-pendente',
-            'CONFIRMADO': 'status-confirmado',
-            'EM_PREPARACAO': 'status-preparacao',
-            'ENVIADO': 'status-enviado',
-            'ENTREGUE': 'status-entregue',
-            'CANCELADO': 'status-cancelado'
-        };
-        return classMap[status] || 'status-default';
+        return 'status-badge';
     };
 
     if (loading) {
@@ -86,6 +92,10 @@ export default function PedidosCliente() {
             <HeaderPesquisa />
             
             <div className="pedidos-container">
+                <div className="pedidos-header">
+                    <h1>Meus Pedidos</h1>
+                    <p>Acompanhe o status dos seus pedidos realizados</p>
+                </div>
                 {error && <div className="error-message">{error}</div>}
                 
                 {pedidos.length === 0 ? (
@@ -100,70 +110,43 @@ export default function PedidosCliente() {
                         </button>
                     </div>
                 ) : (
-                    <div className="pedidos-list">
-                        {pedidos.map(pedido => (
-                            <div key={pedido.id} className="pedido-card">
-                                <div className="pedido-header">
-                                    <div className="pedido-info">
-                                        <h3>Pedido #{pedido.id}</h3>
-                                        <p className="pedido-data">
-                                            Realizado em {formatDate(pedido.dataPedido)}
-                                        </p>
-                                    </div>
-                                    <div className={`pedido-status ${getStatusClass(pedido.status)}`}>
-                                        {getStatusText(pedido.status)}
-                                    </div>
-                                </div>
-                                
-                                <div className="pedido-content">
-                                    <div className="pedido-itens">
-                                        <h4>Itens do Pedido:</h4>
-                                        {pedido.itens && pedido.itens.map(item => (
-                                            <div key={item.produto.id} className="item-pedido">
-                                                <div className="item-info">
-                                                    <span className="item-nome">{item.produto.nome}</span>
-                                                    <span className="item-quantidade">Qtd: {item.quantidade}</span>
-                                                    <span className="item-preco">
-                                                        {formatCurrency(item.precoUnitario)}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    
-                                    <div className="pedido-resumo">
-                                        <div className="resumo-item">
-                                            <span>Subtotal:</span>
-                                            <span>{formatCurrency(pedido.subtotal || 0)}</span>
-                                        </div>
-                                        {pedido.valorFrete && (
-                                            <div className="resumo-item">
-                                                <span>Frete:</span>
-                                                <span>{formatCurrency(pedido.valorFrete)}</span>
-                                            </div>
-                                        )}
-                                        <div className="resumo-item total">
-                                            <span>Total:</span>
-                                            <span>{formatCurrency(pedido.valorTotal)}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                {pedido.enderecoEntrega && (
-                                    <div className="pedido-endereco">
-                                        <h4>Endereço de Entrega:</h4>
-                                        <p>
-                                            {pedido.enderecoEntrega.logradouro}, {pedido.enderecoEntrega.numero}
-                                            {pedido.enderecoEntrega.complemento && `, ${pedido.enderecoEntrega.complemento}`}
-                                        </p>
-                                        <p>
-                                            {pedido.enderecoEntrega.bairro} - {pedido.enderecoEntrega.cidade}/{pedido.enderecoEntrega.uf}
-                                        </p>
-                                        <p>CEP: {pedido.enderecoEntrega.cep}</p>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
+                    <div className="pedidos-table-container">
+                        <table className="pedidos-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Data</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {pedidos.map(pedido => (
+                                    <tr key={pedido.id}>
+                                        <td>#{pedido.numeroPedido || pedido.id}</td>
+                                        <td>{formatDate(pedido.dataPedido)}</td>
+                                        <td>{formatCurrency(pedido.valorTotal)}</td>
+                                        <td>
+                                            <span 
+                                                className="status-badge" 
+                                                style={{backgroundColor: getStatusColor(pedido.status), color: 'white'}}
+                                            >
+                                                {getStatusText(pedido.status)}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button 
+                                                className="btn-detalhes"
+                                                onClick={() => navigate(`/pedidos/${pedido.id}/detalhes`)}
+                                            >
+                                                Ver Detalhes
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 )}
             </div>

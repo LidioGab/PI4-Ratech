@@ -33,8 +33,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   async function login(email, senha) {
-    const senhaHash = await hashPasswordClientSide(senha);
-    const body = { email, senha, senhaHash };
+    // Enviar senha em texto plano - o backend cuidará da validação com BCrypt
+    const body = { email, senha };
     const { data } = await api.post('/api/login', body);
     setUser(data);
     localStorage.setItem('sessionUser', JSON.stringify(data));

@@ -104,6 +104,12 @@ select 'João Estoquista', '222.222.222-22', 'estoquista@ratech.com', '$2a$10$wG
        (select id_grupo from tb_grupo where nome = 'Estoquista' limit 1)
 where not exists (select 1 from tb_usuario u where u.email = 'estoquista@ratech.com');
 
+-- Usuário teste com senha simples: 123456 -> $2a$10$N9qo8uLOickgx2ZMRZoMye7Uo1SRpicJcKsHoAiizUQ8RZ.3JaU5u
+insert into tb_usuario (nome, cpf, email, senha, status, id_grupo)
+select 'Teste Admin', '333.333.333-33', 'test@test.com', '$2a$10$N9qo8uLOickgx2ZMRZoMye7Uo1SRpicJcKsHoAiizUQ8RZ.3JaU5u', true,
+       (select id_grupo from tb_grupo where nome = 'Administrador' limit 1)
+where not exists (select 1 from tb_usuario u where u.email = 'test@test.com');
+
 insert into tb_produto (nome, avaliacao, descricao, preco, qtd_estoque, status) values
 ('Notebook Dell', 4.5, 'Notebook Dell com 16GB RAM e SSD 512GB', 4500.00, 10, true),
 ('Mouse Gamer', 4.0, 'Mouse gamer RGB com 6 botões programáveis', 150.00, 30, true),
@@ -146,13 +152,16 @@ create table if not exists tb_carrinho_item (
     unique key unique_cliente_produto (id_cliente, id_produto)
 );
 
--- Tabela para pedidos
-create table if not exists tb_pedido (
+-- Tabela para pedidos (recriar se houver problemas com enum)
+drop table if exists tb_item_pedido;
+drop table if exists tb_pedido;
+
+create table tb_pedido (
     id_pedido bigint primary key auto_increment,
     id_cliente int not null,
     numero_pedido varchar(50) not null unique,
     data_pedido timestamp default current_timestamp,
-    status enum('PENDENTE', 'CONFIRMADO', 'PROCESSANDO', 'ENVIADO', 'ENTREGUE', 'CANCELADO') not null default 'PENDENTE',
+    status enum('AGUARDANDO_PAGAMENTO', 'PAGAMENTO_REJEITADO', 'PAGAMENTO_COM_SUCESSO', 'AGUARDANDO_RETIRADA', 'EM_TRANSITO', 'ENTREGUE', 'CANCELADO') not null default 'AGUARDANDO_PAGAMENTO',
     subtotal decimal(10,2) not null,
     valor_frete decimal(10,2) not null,
     valor_total decimal(10,2) not null,
@@ -172,7 +181,7 @@ create table if not exists tb_pedido (
 );
 
 -- Tabela para itens dos pedidos
-create table if not exists tb_item_pedido (
+create table tb_item_pedido (
     id_item_pedido bigint primary key auto_increment,
     id_pedido bigint not null,
     id_produto int not null,

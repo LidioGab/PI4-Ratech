@@ -10,17 +10,24 @@ export default function LoginPage() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, logout } = useAuth();
 
   async function handleLogin(e) {
     e.preventDefault();
     setError(null);
     setLoading(true);
     try {
-      await login(email, senha);
-      navigate('/admdashboard');
+      const userData = await login(email, senha);
+      
+      // Verificar se é usuário administrativo
+      if (userData.grupo === 'Administrador' || userData.grupo === 'Estoquista') {
+        navigate('/admdashboard');
+      } else {
+        setError('Esta tela de login é apenas para usuários de backoffice');
+        logout(); // Fazer logout do cliente
+      }
     } catch (err) {
-      const msg = err?.response?.data || 'Falha no login';
+      const msg = err?.response?.data || 'Usuário ou senha inválidos';
       setError(msg);
     } finally {
       setLoading(false);

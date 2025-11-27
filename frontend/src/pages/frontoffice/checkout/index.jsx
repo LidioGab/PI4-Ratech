@@ -44,8 +44,8 @@ export default function Checkout() {
             return;
         }
 
-        // Se chegou até aqui, cliente está logado - ir direto para checkout/endereco
-        navigate('/checkout/endereco');
+        // Se chegou até aqui, cliente está logado - iniciar checkout
+        // (manter na mesma página para mostrar resumo antes)
     }, [cart, navigate]);
 
     const validarCliente = async () => {

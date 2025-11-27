@@ -9,6 +9,27 @@
     padding: 2rem;
 }
 
+.pedidos-header {
+    margin-bottom: 2rem;
+    padding: 1.5rem 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pedidos-header h1 {
+    margin: 0 0 0.5rem 0;
+    color: #1f2937;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.pedidos-header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 1rem;
+}
+
 .loading {
     text-align: center;
     padding: 3rem;
@@ -148,6 +169,17 @@
     border: 1px solid #f1aeb5;
 }
 
+.status-badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    color: white !important;
+}
+
 .pedido-content {
     padding: 1.5rem;
     display: grid;
@@ -234,6 +266,81 @@
     line-height: 1.4;
 }
 
+/* Estilos da tabela de pedidos */
+.pedidos-table-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.pedidos-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.pedidos-table th {
+    background-color: #f8fafc;
+    color: #374151;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 2px solid #e5e7eb;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.pedidos-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    font-size: 0.9rem;
+    color: #374151;
+}
+
+.pedidos-table tbody tr:hover {
+    background-color: #f9fafb;
+    transition: background-color 0.2s ease;
+}
+
+.pedidos-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.btn-detalhes {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-detalhes:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    white-space: nowrap;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     .pedidos-container {
@@ -259,5 +366,25 @@
     
     .no-pedidos {
         padding: 2rem 1rem;
+    }
+    
+    /* Responsividade da tabela */
+    .pedidos-table-container {
+        overflow-x: auto;
+    }
+    
+    .pedidos-table th,
+    .pedidos-table td {
+        padding: 0.7rem;
+        font-size: 0.85rem;
+    }
+    
+    .pedidos-table th {
+        font-size: 0.8rem;
+    }
+    
+    .btn-detalhes {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
     }
 }

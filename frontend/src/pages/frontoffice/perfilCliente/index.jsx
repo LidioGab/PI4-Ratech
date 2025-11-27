@@ -38,7 +38,8 @@ export default function PerfilCliente() {
     bairro: '',
     cidade: '',
     estado: '',
-    tipoEndereco: 'ENTREGA'
+    tipoEndereco: 'ENTREGA',
+    principal: false
   });
 
   // Estados de controle
@@ -232,23 +233,7 @@ export default function PerfilCliente() {
     }
   }
 
-  async function handleRemoverEndereco(enderecoId) {
-    if (!confirm('Tem certeza que deseja remover este endereço?')) return;
 
-    try {
-      setLoading(true);
-      await api.delete(`/api/clientes/${clienteLogado.id}/enderecos/${enderecoId}`);
-
-      setEnderecos(prev => prev.filter(end => end.id !== enderecoId));
-      mostrarMensagem('Endereço removido com sucesso!', 'sucesso');
-    } catch (error) {
-      console.error('Erro ao remover endereço:', error);
-      const mensagemErro = error.response?.data?.message || 'Erro ao remover endereço';
-      mostrarMensagem(mensagemErro, 'erro');
-    } finally {
-      setLoading(false);
-    }
-  }
 
   if (loading && !clienteLogado) {
     return <div className="loading">Carregando...</div>;
@@ -408,7 +393,7 @@ export default function PerfilCliente() {
               {enderecos.map((endereco) => (
                 <div key={endereco.id} className="endereco-card">
                   <div className="endereco-info">
-                    <h4>{endereco.tipoEndereco}</h4>
+                    <h4>{endereco.tipoEndereco} {endereco.principal && '(Principal)'}</h4>
                     <p>
                       {endereco.logradouro}, {endereco.numero}
                       {endereco.complemento && `, ${endereco.complemento}`}
@@ -416,13 +401,6 @@ export default function PerfilCliente() {
                     <p>{endereco.bairro} - {endereco.cidade}/{endereco.estado}</p>
                     <p>CEP: {endereco.cep}</p>
                   </div>
-                  <button
-                    className="btn-remove"
-                    onClick={() => handleRemoverEndereco(endereco.id)}
-                    disabled={loading}
-                  >
-                    Remover
-                  </button>
                 </div>
               ))}
             </div>
@@ -520,6 +498,17 @@ export default function PerfilCliente() {
                       maxLength="2"
                       required
                     />
+                  </div>
+
+                  <div className="form-group">
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={novoEndereco.principal}
+                        onChange={(e) => setNovoEndereco(prev => ({ ...prev, principal: e.target.checked }))}
+                      />
+                      Definir como endereço principal
+                    </label>
                   </div>
                 </div>
 
